@@ -1,2 +1,3 @@
 export * from "./setCurrentUser";
-export * from "./getCurrentUserInfo";
+export * from "./getCurrentUser";
+export * from './setCartItems';

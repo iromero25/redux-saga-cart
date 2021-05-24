@@ -16,19 +16,9 @@ export interface SetCurrentUserAction extends Action<typeof SET_CURRENT_USER> {
   };
 }
 
+// if we specified the wrong field (from the one in the interface),
+// the pre-compiler would complain, which is what we want
 export const setCurrentUser = makeActionCreator<SetCurrentUserAction>(
   SET_CURRENT_USER,
-  "user" // if we specified something different, the pre-compiler would allow it, which is wrong
+  "user"
 );
-
-// export const setCurrentUser = makeActionCreator<SetCurrentUserAction>(
-//   SET_CURRENT_USER,
-//   "name"
-// );
-
-// export const setCurrentUser = (user: User): SetCurrentUserAction => ({
-//   type: SET_CURRENT_USER,
-//   payload: {
-//     user,
-//   },
-// });

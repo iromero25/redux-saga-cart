@@ -1,13 +1,13 @@
 import { take, put, call } from "redux-saga/effects";
 import {
-  GET_CURRENT_USER_INFO,
+  GET_CURRENT_USER,
   User,
   setCurrentUser,
-  GetCurrentUserInfoAction,
+  GetCurrentUserAction,
 } from "../actions";
 
 export function* currentUserSaga() {
-  const { payload }: GetCurrentUserInfoAction = yield take(GET_CURRENT_USER_INFO);
+  const { payload }: GetCurrentUserAction = yield take(GET_CURRENT_USER);
   const response: Response = yield call(
     fetch,
     `http://localhost:8081/user/${payload.id}`

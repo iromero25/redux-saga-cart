@@ -1,22 +1,22 @@
 import React, { useEffect } from "react";
 import UserInfo from "../userInfo";
 import { connect, ConnectedProps } from "react-redux";
-import { getCurrentUserInfo } from "../../actions";
-// import { CartItemListContainer } from '../CartItemList'
+import { getCurrentUser } from "../../actions";
+import CartItemList from "../cartItems/cartItemList";
 // import { OrderSummaryContainer } from '../OrderSummary'
 // import { SupportAvailableContainer } from '../SupportAvailable'
 
 const mapDispatchToProps = {
-  getCurrentUserInfo,
+  getCurrentUser,
 };
 
 const connector = connect(null, mapDispatchToProps);
+
 interface ReduxProps extends ConnectedProps<typeof connector> {}
 
-const CartManageViewDisplay: React.FC<ReduxProps> = ({ getCurrentUserInfo }) => {
+const CartManageViewDisplay: React.FC<ReduxProps> = ({ getCurrentUser }) => {
   useEffect(() => {
-    console.log("before dispatching getCurrentUserInfo");
-    getCurrentUserInfo("U10000");
+    getCurrentUser("U10000");
   }, []);
 
   return (
@@ -33,7 +33,7 @@ const CartManageViewDisplay: React.FC<ReduxProps> = ({ getCurrentUserInfo }) => 
           <UserInfo />
           <section className="cart-items">
             <h3>Your Cart</h3>
-            {/* <CartItemListContainer /> */}
+            <CartItemList />
           </section>
         </section>
         {/* <OrderSummaryContainer /> */}
