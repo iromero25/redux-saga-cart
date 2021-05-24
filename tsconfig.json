@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "es2015",
+    "moduleResolution": "node" /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */,
+    "esModuleInterop": true,
+    "strict": true,
+    "jsx": "react" /* Specify hoe to compile JSX code: 'preserve', 'react-native', or 'react'./, */
+  }
+}

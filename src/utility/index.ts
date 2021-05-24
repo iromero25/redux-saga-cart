@@ -1,0 +1,1 @@
+export { makeActionCreator } from "./makeActionCreator";
