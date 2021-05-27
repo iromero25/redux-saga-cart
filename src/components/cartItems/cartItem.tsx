@@ -1,31 +1,28 @@
 import React from "react";
-import { connect, ConnectedProps } from "react-redux";
-import { Item } from "../../actions";
-import { Store } from "../../store";
+import { Item, ItemDetail } from "../../actions";
 import { isEmpty } from "lodash";
-// import { FETCHED } from "../../actions";
+import StoreConnector, { MapToState } from "../StoreConnector";
 
-const mapStateToProps = (state: Store, ownProps: Item) => {
-  const items = state.items;
-  const itemDetail = items.find(item => item.id === ownProps.id);
+interface OwnProps extends Item {}
+interface Props extends ItemDetail {
+  fetched: boolean;
+  price: number;
+}
+
+const mapStateToProps: MapToState = (state, ownProps) => {
+  const itemDetails = state.itemDetails;
+  const itemDetail = itemDetails.find(itemDetail => itemDetail.id === ownProps.id);
   return {
-    fetched: false,
+    fetched: !isEmpty(itemDetail),
     ...itemDetail,
   };
 };
 
-const connector = connect(mapStateToProps);
-
-interface ReduxProps extends ConnectedProps<typeof connector> {}
-// interface Props extends Item {
-//   fetched: boolean;
-// }
-
-const CartItemDisplay: React.FC<ReduxProps> = ({
+const CartItemDisplay: React.FC<Props & OwnProps> = ({
   fetched,
-  // name,
-  // description,
-  // price,
+  name,
+  description,
+  price,
   id,
   quantity,
   // increaseItemQuantity,
@@ -35,7 +32,7 @@ const CartItemDisplay: React.FC<ReduxProps> = ({
   <div>
     {fetched ? (
       <div>
-        {/* <h5>{name}</h5>
+        <h5>{name}</h5>
         <div>
           {price ? (
             <div>${price}</div>
@@ -48,7 +45,7 @@ const CartItemDisplay: React.FC<ReduxProps> = ({
             </div>
           )}
         </div>
-        <p>{description}</p> */}
+        <p>{description}</p>
         <section>
           <span className="item-quantity">Quantity: {quantity}</span>
           {/* <button
@@ -73,4 +70,4 @@ const CartItemDisplay: React.FC<ReduxProps> = ({
   </div>
 );
 
-export default connector(CartItemDisplay);
+export default StoreConnector(CartItemDisplay, mapStateToProps);

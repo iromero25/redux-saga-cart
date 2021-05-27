@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import UserInfo from "../userInfo";
 import { connect, ConnectedProps } from "react-redux";
 import { getCurrentUser } from "../../actions";
-import CartItemList from "../cartItems/cartItemList";
+import CartItemList from "../cartItems/CartItemList";
 // import { OrderSummaryContainer } from '../OrderSummary'
 // import { SupportAvailableContainer } from '../SupportAvailable'
 
@@ -33,7 +33,7 @@ const CartManageViewDisplay: React.FC<ReduxProps> = ({ getCurrentUser }) => {
           <UserInfo />
           <section className="cart-items">
             <h3>Your Cart</h3>
-            <CartItemList />
+            <CartItemList loadingMessage={"Please wait..."} />
           </section>
         </section>
         {/* <OrderSummaryContainer /> */}

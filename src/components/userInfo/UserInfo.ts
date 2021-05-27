@@ -7,15 +7,6 @@ import { UserInfoDisplay } from "./UserInfoDisplay";
 //     currentUserSelector
 // } from './../../selectors'
 
-// const mapStateToProps = (state) => {
-//     const user = currentUserSelector(state);
-//     return user ? {
-//         ...user.toJS(),
-//         fetched:true
-//     } : {
-//         fetched:false
-//     }
-// };
 const mapStateToProps = (state: Store) => {
   const { currentUser } = state;
   return !isEmpty(currentUser)
