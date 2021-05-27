@@ -6,23 +6,23 @@ import CartItem from "./CartItem";
 import StoreConnector from "../StoreConnector";
 
 interface StoreProps {
-  items: Item[];
+  cartItems: Item[];
 }
 interface OwnProps {
   loadingMessage: string;
 }
 const mapStateToProps = (state: Store) => ({
-  items: state.items,
+  cartItems: state.cartItems,
 });
 
 const CartItemList: React.FC<StoreProps & OwnProps> = ({
-  items,
+  cartItems,
   loadingMessage,
 }) => (
   <>
-    {!isEmpty(items) ? (
+    {!isEmpty(cartItems) ? (
       <div>
-        {items.map(item => (
+        {cartItems.map(item => (
           <CartItem key={item.id} {...item} />
         ))}
       </div>

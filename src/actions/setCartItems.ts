@@ -9,11 +9,11 @@ export interface Item {
 
 export interface SetCartItemsAction extends Action<typeof SET_CART_ITEMS> {
   payload: {
-    items: Item[];
+    cartItems: Item[];
   };
 }
 
 export const setCartItems = makeActionCreator<SetCartItemsAction>(
   SET_CART_ITEMS,
-  "items"
+  "cartItems"
 );

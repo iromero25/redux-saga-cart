@@ -1,6 +1,10 @@
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
-import { cartItemsReducer, currentUserReducer } from "./reducers";
+import {
+  cartItemsReducer,
+  currentUserReducer,
+  itemDetailsReducer,
+} from "./reducers";
 import logger from "redux-logger";
 import rootSaga from "./sagas";
 
@@ -13,7 +17,8 @@ const middlewares =
 
 const rootReducer = combineReducers({
   currentUser: currentUserReducer,
-  items: cartItemsReducer,
+  cartItems: cartItemsReducer,
+  itemDetails: itemDetailsReducer,
 });
 
 const store = createStore(
