@@ -11,15 +11,41 @@ interface CustomAction<U> extends Action {
 // from a Payload interface that specifies  'user' as key, then we expect 'user'
 // to be specified as the  `argName`; speicfying something else would be marked
 // as an error by the pre-compiler (whihc is exactly what I want).
+// export const makeActionCreator =
+//   <T extends CustomAction<T["payload"]>>(
+//     type: T["type"],
+//     argName: keyof T["payload"]
+//   ) =>
+//   <U>(argVal: U) => {
+//     const payload = {
+//       [argName]: argVal,
+//     };
+//     return {
+//       type,
+//       payload,
+//     };
+//   };
+
 export const makeActionCreator =
   <T extends CustomAction<T["payload"]>>(
     type: T["type"],
-    argName: keyof T["payload"]
+    ...argNames: Array<keyof T["payload"]>
   ) =>
-  <U>(argVal: U) => {
-    const payload = {
-      [argName]: argVal,
-    };
+  // <U>(...argVals: Array<U>) => {
+  <U extends CustomAction<U["payload"]>>(...argVals: Array<U["payload"]>) => {
+    let payload = {};
+    if (Array.isArray(argNames) && argNames.length) {
+      argNames.forEach((argName, index) => {
+        payload = {
+          ...payload,
+          [argName]: argVals[index],
+        };
+      });
+    } else {
+      payload = {
+        [argNames[0]]: argVals[0],
+      };
+    }
     return {
       type,
       payload,

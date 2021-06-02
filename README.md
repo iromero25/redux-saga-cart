@@ -8,7 +8,7 @@ To Do: mention that this app relies on an external server to serve its AJAX requ
 
 ## Higher Order Component
 
-A Higher Order Component (HOC) was created to connect a component to the Redux's store. The component is called [StoreConnector](./src/components/StoreConnector).
+A Higher Order Component (HOC) was created to connect a component to the Redux's store. The component is called [StoreConnector](./src/components/StoreConnector.tsx).
 
 This proved challenging due to an ongoing issue with Typescript's dynamic typing of the wrapped component's props which can be seen [here](https://github.com/microsoft/TypeScript/issues/28884).
 

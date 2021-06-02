@@ -4,6 +4,7 @@ import {
   cartItemsReducer,
   currentUserReducer,
   itemDetailsReducer,
+  itemQuantityFetchStatusReducer,
 } from "./reducers";
 import logger from "redux-logger";
 import rootSaga from "./sagas";
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   currentUser: currentUserReducer,
   cartItems: cartItemsReducer,
   itemDetails: itemDetailsReducer,
+  itemQuantityFetchStatus: itemQuantityFetchStatusReducer,
 });
 
 const store = createStore(
