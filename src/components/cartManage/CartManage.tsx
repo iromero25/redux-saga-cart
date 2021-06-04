@@ -3,7 +3,7 @@ import UserInfo from "../userInfo";
 import { connect, ConnectedProps } from "react-redux";
 import { getCurrentUser } from "../../actions";
 import CartItemList from "../cartItems/CartItemList";
-// import { OrderSummaryContainer } from '../OrderSummary'
+import OrderSummary from "../OrderSummary";
 // import { SupportAvailableContainer } from '../SupportAvailable'
 
 const mapDispatchToProps = {
@@ -36,7 +36,7 @@ const CartManageViewDisplay: React.FC<ReduxProps> = ({ getCurrentUser }) => {
             <CartItemList loadingMessage={"Please wait..."} />
           </section>
         </section>
-        {/* <OrderSummaryContainer /> */}
+        <OrderSummary />
       </section>
       <section>{/* <SupportAvailableContainer /> */}</section>
     </div>

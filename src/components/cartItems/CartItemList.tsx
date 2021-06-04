@@ -23,7 +23,7 @@ const CartItemList: React.FC<StoreProps & OwnProps> = ({
     {!isEmpty(cartItems) ? (
       <div>
         {cartItems.map(item => (
-          <CartItem key={item.id} {...item} price={0} />
+          <CartItem key={item.id} {...item} />
         ))}
       </div>
     ) : (

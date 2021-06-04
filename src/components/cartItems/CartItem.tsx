@@ -8,6 +8,7 @@ import {
 import { isEmpty } from "lodash";
 import { Store } from "../../store";
 import { connect, ConnectedProps } from "react-redux";
+import { itemPriceSelector } from "../../selectors";
 // import StoreConnector, { MapToState } from "../StoreConnector";
 
 interface OwnProps extends Item {}
@@ -21,9 +22,11 @@ const mapStateToProps = (state: Store, ownProps: OwnProps) => {
   const itemDetails = state.itemDetails;
   const quantityFetchStatus = state.itemQuantityFetchStatus;
   const itemDetail = itemDetails.find(itemDetail => itemDetail.id === ownProps.id);
+  const price = itemDetail ? itemPriceSelector(itemDetail.id)(state) : 0;
   return {
-    quantityFetchStatus,
     fetched: !isEmpty(itemDetail),
+    quantityFetchStatus,
+    price,
     ...itemDetail,
   };
 };
@@ -35,7 +38,6 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 interface ReduxProps extends ConnectedProps<typeof connector> {
-  price: number;
   quantity: number;
 }
 
