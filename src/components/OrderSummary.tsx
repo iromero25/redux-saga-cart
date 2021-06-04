@@ -4,11 +4,11 @@ import { Store } from "../store";
 import { itemPriceSelector } from "../selectors";
 import { formatCurrency } from "../utility/formatCurrency";
 import { isEmpty } from "lodash";
+import { FETCHED } from "../actions";
 // import { CheckoutButtonContainer } from "../CheckoutButton";
 
 const mapStateToProps = (state: Store) => {
   const items = state.cartItems;
-  // const currency = state.currentUser.country || "usd";
   let subtotalFetched = !isEmpty(items);
   const subtotal =
     items?.reduce((total, item) => {
@@ -28,6 +28,8 @@ const mapStateToProps = (state: Store) => {
   return {
     subtotalFetched,
     subtotal,
+    shippingCost: state.shippingCost,
+    shippingFetched: state.shippingFetchStatus === FETCHED,
   };
 };
 const connector = connect(mapStateToProps, {});
@@ -37,8 +39,8 @@ interface ReduxProps extends ConnectedProps<typeof connector> {}
 const OrderSummary: React.FC<ReduxProps> = ({
   subtotal,
   subtotalFetched,
-  // shippingFetched,
-  // shippingCost,
+  shippingFetched,
+  shippingCost,
   // totalTaxFetched,
   // totalTax,
   // total,
@@ -59,7 +61,7 @@ const OrderSummary: React.FC<ReduxProps> = ({
               )}
             </td>
           </tr>
-          {/* <tr>
+          <tr>
             <th>Shipping</th>
             <td>
               {shippingFetched ? (
@@ -69,7 +71,7 @@ const OrderSummary: React.FC<ReduxProps> = ({
               )}
             </td>
           </tr>
-          <tr>
+          {/* <tr>
             <th>Tax</th>
             <td>
               {totalTaxFetched ? (
@@ -89,6 +91,4 @@ const OrderSummary: React.FC<ReduxProps> = ({
   </section>
 );
 
-// const Com = () => <div></div>;
-// export default Com;
 export default connector(OrderSummary);

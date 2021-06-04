@@ -5,9 +5,11 @@ import {
   currentUserReducer,
   itemDetailsReducer,
   itemQuantityFetchStatusReducer,
+  shippingCostReducer,
+  shippingFetchStatusReducer,
 } from "./reducers";
 import logger from "redux-logger";
-import rootSaga from "./sagas";
+import rootSaga from "./sagas/rootSaga";
 
 const emptyInitialState = {};
 const sagaMiddleware = createSagaMiddleware();
@@ -21,6 +23,8 @@ const rootReducer = combineReducers({
   cartItems: cartItemsReducer,
   itemDetails: itemDetailsReducer,
   itemQuantityFetchStatus: itemQuantityFetchStatusReducer,
+  shippingFetchStatus: shippingFetchStatusReducer,
+  shippingCost: shippingCostReducer,
 });
 
 const store = createStore(

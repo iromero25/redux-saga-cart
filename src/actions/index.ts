@@ -5,3 +5,5 @@ export * from "./setItemDetails";
 export * from "./increaseItemQuantity";
 export * from "./decreaseItemQuantity";
 export * from "./setItemQuantityFetchStatus";
+export * from "./setShippingFetchStatus";
+export * from "./setShippingCost";
