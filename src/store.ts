@@ -7,6 +7,7 @@ import {
   itemQuantityFetchStatusReducer,
   shippingCostReducer,
   shippingFetchStatusReducer,
+  taxRateReducer,
 } from "./reducers";
 import logger from "redux-logger";
 import rootSaga from "./sagas/rootSaga";
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   itemQuantityFetchStatus: itemQuantityFetchStatusReducer,
   shippingFetchStatus: shippingFetchStatusReducer,
   shippingCost: shippingCostReducer,
+  taxRate: taxRateReducer,
 });
 
 const store = createStore(

@@ -5,13 +5,13 @@ import { itemPriceSelector } from "../selectors";
 import { formatCurrency } from "../utility/formatCurrency";
 import { isEmpty } from "lodash";
 import { FETCHED } from "../actions";
-// import { CheckoutButtonContainer } from "../CheckoutButton";
+import CheckoutButton from "./CheckoutButton";
 
 const mapStateToProps = (state: Store) => {
-  const items = state.cartItems;
-  let subtotalFetched = !isEmpty(items);
+  const { cartItems, shippingCost, shippingFetchStatus, taxRate } = state;
+  let subtotalFetched = !isEmpty(cartItems);
   const subtotal =
-    items?.reduce((total, item) => {
+    cartItems?.reduce((total, item) => {
       const { id, quantity } = item;
       // `itemPriceSelector` will try to get the price from state.itemDetails and doesn't
       // guarantee us a price since we might be populating that part of the state at this
@@ -25,11 +25,20 @@ const mapStateToProps = (state: Store) => {
       return total;
     }, 0) ?? 0;
 
+  const shippingFetched = shippingFetchStatus === FETCHED && subtotalFetched;
+  const taxRateFetched = taxRate !== 0;
+  const totalTax = (subtotal + shippingCost) * taxRate;
+  const totalTaxFetched = taxRateFetched && shippingFetched && subtotalFetched;
+  const total = totalTaxFetched ? subtotal + shippingCost + totalTax : null;
+
   return {
     subtotalFetched,
     subtotal,
-    shippingCost: state.shippingCost,
-    shippingFetched: state.shippingFetchStatus === FETCHED,
+    shippingCost,
+    shippingFetched,
+    totalTax,
+    totalTaxFetched,
+    total,
   };
 };
 const connector = connect(mapStateToProps, {});
@@ -41,13 +50,13 @@ const OrderSummary: React.FC<ReduxProps> = ({
   subtotalFetched,
   shippingFetched,
   shippingCost,
-  // totalTaxFetched,
-  // totalTax,
-  // total,
+  totalTax,
+  totalTaxFetched,
+  total,
 }) => (
   <section className="col-6">
     <section>
-      {/* <CheckoutButtonContainer /> */}
+      <CheckoutButton />
       <h4>Order Summary</h4>
       <table className="table">
         <tbody>
@@ -71,7 +80,7 @@ const OrderSummary: React.FC<ReduxProps> = ({
               )}
             </td>
           </tr>
-          {/* <tr>
+          <tr>
             <th>Tax</th>
             <td>
               {totalTaxFetched ? (
@@ -84,7 +93,7 @@ const OrderSummary: React.FC<ReduxProps> = ({
           <tr className="total-tr">
             <th>Total</th>
             <td>{total ? formatCurrency(total) : <div className="loader" />}</td>
-          </tr> */}
+          </tr>
         </tbody>
       </table>
     </section>

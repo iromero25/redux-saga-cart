@@ -7,3 +7,4 @@ export * from "./decreaseItemQuantity";
 export * from "./setItemQuantityFetchStatus";
 export * from "./setShippingFetchStatus";
 export * from "./setShippingCost";
+export * from "./setTaxRate";

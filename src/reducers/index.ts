@@ -4,3 +4,4 @@ export * from "./itemDetails";
 export * from "./itemQuantityFetchStatus";
 export * from "./shippingFetchStatus";
 export * from "./shippingCost";
+export * from "./taxRate";
