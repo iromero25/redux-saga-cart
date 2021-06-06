@@ -1,6 +1,7 @@
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
 import {
+  canCheckOutReducer,
   cartItemsReducer,
   currentUserReducer,
   itemDetailsReducer,
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   shippingFetchStatus: shippingFetchStatusReducer,
   shippingCost: shippingCostReducer,
   taxRate: taxRateReducer,
+  canCheckOut: canCheckOutReducer,
 });
 
 const store = createStore(

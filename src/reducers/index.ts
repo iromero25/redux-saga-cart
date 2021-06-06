@@ -5,3 +5,4 @@ export * from "./itemQuantityFetchStatus";
 export * from "./shippingFetchStatus";
 export * from "./shippingCost";
 export * from "./taxRate";
+export * from "./canCheckOut";
