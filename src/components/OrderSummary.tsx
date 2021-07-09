@@ -66,7 +66,7 @@ const OrderSummary: React.FC<ReduxProps> = ({
               {subtotalFetched ? (
                 formatCurrency(subtotal)
               ) : (
-                <div className="loader" />
+                <div className="loader" title="calculating subtotal..." />
               )}
             </td>
           </tr>
