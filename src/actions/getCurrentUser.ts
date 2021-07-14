@@ -10,7 +10,14 @@ export interface GetCurrentUserAction extends Action<typeof GET_CURRENT_USER> {
   payload: Payload;
 }
 
-export const getCurrentUser = makeActionCreator<GetCurrentUserAction>(
-  GET_CURRENT_USER,
-  "id"
-);
+// export const getCurrentUser = makeActionCreator<GetCurrentUserAction>(
+//   GET_CURRENT_USER,
+//   "id"
+// );
+
+export const getCurrentUser = (userId: string): GetCurrentUserAction => ({
+  type: GET_CURRENT_USER,
+  payload: {
+    id: userId,
+  },
+});

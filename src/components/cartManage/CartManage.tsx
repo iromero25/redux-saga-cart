@@ -1,24 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import UserInfo from "../userInfo";
-import { connect, ConnectedProps } from "react-redux";
-import { getCurrentUser } from "../../actions";
 import CartItemList from "../cartItems/CartItemList";
 import OrderSummary from "../OrderSummary";
 // import { SupportAvailableContainer } from '../SupportAvailable'
 
-const mapDispatchToProps = {
-  getCurrentUser,
-};
-
-const connector = connect(null, mapDispatchToProps);
-
-interface ReduxProps extends ConnectedProps<typeof connector> {}
-
-const CartManageViewDisplay: React.FC<ReduxProps> = ({ getCurrentUser }) => {
-  useEffect(() => {
-    getCurrentUser("U10000");
-  }, []);
-
+const CartManageViewDisplay: React.FC = () => {
   return (
     <div>
       <section className="row">
@@ -43,4 +29,4 @@ const CartManageViewDisplay: React.FC<ReduxProps> = ({ getCurrentUser }) => {
   );
 };
 
-export default connector(CartManageViewDisplay);
+export default CartManageViewDisplay;

@@ -1,4 +1,4 @@
-import { all, call, take, put, fork } from "redux-saga/effects";
+import { all, take, put, fork } from "redux-saga/effects";
 import {
   SET_CART_ITEMS,
   Item,
@@ -6,12 +6,10 @@ import {
   setItemDetails,
   SetCartItemsAction,
 } from "../actions";
+import { fetchItem } from "../api/fetchers";
 
 function* loadItemDetailSaga(item: Item) {
-  const response: Response = yield call(
-    fetch,
-    `http://localhost:8081/items/${item.id}`
-  );
+  const response: Response = yield fetchItem(item.id);
   const [itemDetail]: ItemDetail[] = yield response.json();
   yield put(setItemDetails(itemDetail));
 }

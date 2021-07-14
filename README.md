@@ -26,6 +26,12 @@ There are a couple of important issues to pay attention to in there:
 
 1. If the `mapStateToProps` is using/accessing `ownProps` then **it has to be typed** using the `MapToState` type that is exported by `StoreConnector`. The reason behind this is that `StoreConnector` cannot correctly infer `mapStateToProps` type when ownProps is involved. See the _mapStateToProps_ defined in the [CartItem](./src/components/cartItems/CartItem) component to see an example of this situtation.
 
+## (Integration) Testing
+
+I am providing integration tests for some components and as such, sagas are being tested. I am using React's Testing-Library and thus, my tests are focused on checking the DOM being updated accordingly, specially after a saga has bein triggered. Here's a list of the test files and descriptions:
+
+1. [UserInfo.test.tsx](./src/components/UserInfo.test.tsx). Tests `UserInfo`. This is the first test to look at and the simplest one. It is testing that the `getCurrentUser` action is triggered as part of the `useEffect` hook in that component and thus, all sagas listening to that action are springed. I mock all API calls involved and let the sagas flow with it. The test is just checking the mocked user data is displayed at the DOM.
+
 ## NPM Registry and Library dependencies
 
 As a reminder, library dependencies were all installed using NPM's public repository using:

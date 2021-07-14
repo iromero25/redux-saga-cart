@@ -1,4 +1,4 @@
-import { call, put, select, takeLatest } from "redux-saga/effects";
+import { put, select, takeLatest } from "redux-saga/effects";
 import {
   DECREASE_ITEM_QUANTITY,
   FETCHED,
@@ -11,6 +11,7 @@ import {
 } from "../actions";
 import { times } from "lodash";
 import { Store } from "../store";
+import { fetchShipping } from "../api/fetchers";
 
 const cartItemsSelector = (state: Store) => state.cartItems;
 
@@ -19,15 +20,13 @@ function* shipping() {
   const cartItems: Item[] = yield select(cartItemsSelector);
   // we need to create a string that repeats the item id as many
   // times as quantity there is for each item separated by commas
-  const cartItemsString = cartItems.reduce(
-    (resultArr, item) => [...resultArr, ...times(item.quantity, () => item.id)],
-    [] as string[]
-  );
-
-  const response: Response = yield call(
-    fetch,
-    `http://localhost:8081/shipping/${cartItemsString}`
-  );
+  const cartItemsString = cartItems
+    .reduce(
+      (resultArr, item) => [...resultArr, ...times(item.quantity, () => item.id)],
+      [] as string[]
+    )
+    .join(",");
+  const response: Response = yield fetchShipping(cartItemsString);
   const { total }: { total: number } = yield response.json();
   yield put(setShippingCost(total));
   yield put(setShippingFetchStatus(FETCHED));

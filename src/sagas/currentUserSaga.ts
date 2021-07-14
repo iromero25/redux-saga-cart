@@ -1,4 +1,5 @@
-import { take, put, call } from "redux-saga/effects";
+import { take, put } from "redux-saga/effects";
+import { fetchUser } from "../api/fetchers";
 import {
   GET_CURRENT_USER,
   User,
@@ -8,10 +9,7 @@ import {
 
 export function* currentUserSaga() {
   const { payload }: GetCurrentUserAction = yield take(GET_CURRENT_USER);
-  const response: Response = yield call(
-    fetch,
-    `http://localhost:8081/user/${payload.id}`
-  );
+  const response: Response = yield fetchUser(payload.id);
   const user: User = yield response.json();
-  yield put(setCurrentUser(user)); // yield is importatnt so the saga knows where to wait
+  yield put(setCurrentUser(user)); // yield is important so the saga knows where to wait
 }
