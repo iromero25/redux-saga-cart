@@ -21,7 +21,7 @@ interface OwnProps extends Item {}
 const mapStateToProps = (state: Store, ownProps: OwnProps) => {
   const itemDetails = state.itemDetails;
   const quantityFetchStatus = state.itemQuantityFetchStatus;
-  const itemDetail = itemDetails.find(itemDetail => itemDetail.id === ownProps.id);
+  const itemDetail = itemDetails.find(itemDetail => itemDetail.id === ownProps.id)!;
   const price = itemDetail ? itemPriceSelector(itemDetail.id)(state) : 0;
   return {
     fetched: !isEmpty(itemDetail),
@@ -75,7 +75,7 @@ const CartItemDisplay: React.FC<ReduxProps> = ({
           <button
             className="btn btn-secondary"
             disabled={quantityFetchStatus !== FETCHED}
-            onClick={() => decreaseItemQuantity(id, false as any)}
+            onClick={() => decreaseItemQuantity(id, false)}
           >
             -
           </button>

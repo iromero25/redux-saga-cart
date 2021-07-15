@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { makeActionCreator } from "../utility";
+import { actionCreator } from "../utility";
 import { FETCHED, FETCHING } from "./setItemQuantityFetchStatus";
 export const SET_SHIPPING_FETCH_STATUS = "SET_SHIPPING_FETCH_STATUS";
 
@@ -8,7 +8,7 @@ export interface SetShippingFetchStatusAction
   payload: { status: typeof FETCHED | typeof FETCHING };
 }
 export const setShippingFetchStatus =
-  makeActionCreator<SetShippingFetchStatusAction>(
+  actionCreator<SetShippingFetchStatusAction>(
     SET_SHIPPING_FETCH_STATUS,
     "status"
   );

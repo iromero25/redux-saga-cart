@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { makeActionCreator } from "../utility";
+import { actionCreator } from "../utility";
 export const SET_ITEM_DETAILS = "SET_ITEM_DETAILS";
 
 export interface ItemDetail {
@@ -18,7 +18,7 @@ export interface SetItemDetailsAction extends Action<typeof SET_ITEM_DETAILS> {
     itemDetail: ItemDetail;
   };
 }
-export const setItemDetails = makeActionCreator<SetItemDetailsAction>(
+export const setItemDetails = actionCreator<SetItemDetailsAction>(
   SET_ITEM_DETAILS,
   "itemDetail"
 );

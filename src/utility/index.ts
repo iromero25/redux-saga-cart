@@ -1,2 +1,3 @@
-export { makeActionCreator } from "./makeActionCreator";
+export * from "./actionCreator";
+export { fetchStatusReducer } from "./fetchStatusReducer";
 export * from "./hasOwnProperty";

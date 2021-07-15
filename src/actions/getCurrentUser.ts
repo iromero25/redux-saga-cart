@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { makeActionCreator } from "../utility";
+import { actionCreator } from "../utility";
 export const GET_CURRENT_USER = "GET_CURRENT_USER";
 
 export interface Payload {
@@ -10,14 +10,7 @@ export interface GetCurrentUserAction extends Action<typeof GET_CURRENT_USER> {
   payload: Payload;
 }
 
-// export const getCurrentUser = makeActionCreator<GetCurrentUserAction>(
-//   GET_CURRENT_USER,
-//   "id"
-// );
-
-export const getCurrentUser = (userId: string): GetCurrentUserAction => ({
-  type: GET_CURRENT_USER,
-  payload: {
-    id: userId,
-  },
-});
+export const getCurrentUser = actionCreator<GetCurrentUserAction>(
+  GET_CURRENT_USER,
+  "id"
+);

@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { makeActionCreator } from "../utility";
+import { actionCreator } from "../utility";
 export const SET_CART_ITEMS = "SET_CART_ITEMS";
 
 export interface Item {
@@ -13,7 +13,7 @@ export interface SetCartItemsAction extends Action<typeof SET_CART_ITEMS> {
   };
 }
 
-export const setCartItems = makeActionCreator<SetCartItemsAction>(
+export const setCartItems = actionCreator<SetCartItemsAction>(
   SET_CART_ITEMS,
   "cartItems"
 );

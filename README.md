@@ -26,6 +26,10 @@ There are a couple of important issues to pay attention to in there:
 
 1. If the `mapStateToProps` is using/accessing `ownProps` then **it has to be typed** using the `MapToState` type that is exported by `StoreConnector`. The reason behind this is that `StoreConnector` cannot correctly infer `mapStateToProps` type when ownProps is involved. See the _mapStateToProps_ defined in the [CartItem](./src/components/cartItems/CartItem) component to see an example of this situtation.
 
+## Utilities
+
+I created the [actionCreator](./src/utility/actionCreator.ts) function that returns (as stated by its name) an Action Creator (which is in turn, also a function). `actionCreator` is strongly typed as is used to create all action creators. An interesting example of `actionCreator` receiving more than one argument can be seen in the [decreaseItemQuantity](./src/actions/decreaseItemQuantity.ts) file.
+
 ## (Integration) Testing
 
 I am providing integration tests for some components and as such, sagas are being tested. I am using React's Testing-Library and thus, my tests are focused on checking the DOM being updated accordingly, specially after a saga has bein triggered. Here's a list of the test files and descriptions:
