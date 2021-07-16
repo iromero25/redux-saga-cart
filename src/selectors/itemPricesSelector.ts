@@ -1,5 +1,5 @@
 import { Store } from "../store";
-import { hasOwnProperty } from "../utility";
+import { hasOwnProperty } from "../utils";
 
 // This item Price selector is a little bit of a pain.
 // As we get the currency from the `itemDetail` based on the user's country,

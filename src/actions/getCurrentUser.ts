@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { actionCreator } from "../utility";
+import { actionCreator } from "../utils";
 export const GET_CURRENT_USER = "GET_CURRENT_USER";
 
 export interface Payload {

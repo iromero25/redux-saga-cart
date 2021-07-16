@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { actionCreator } from "../utility";
+import { actionCreator } from "../utils";
 export const SET_SHIPPING_COST = "SET_SHIPPING_COST";
 
 export interface SetShippingCostAction extends Action<typeof SET_SHIPPING_COST> {

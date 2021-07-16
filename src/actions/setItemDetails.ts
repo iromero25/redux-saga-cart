@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { actionCreator } from "../utility";
+import { actionCreator } from "../utils";
 export const SET_ITEM_DETAILS = "SET_ITEM_DETAILS";
 
 export interface ItemDetail {

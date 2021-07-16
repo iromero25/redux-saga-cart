@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { actionCreator } from "../utility";
+import { actionCreator } from "../utils";
 export const INCREASE_ITEM_QUANTITY = "INCREASE_ITEM_QUANTITY";
 
 export interface IncreaseItemQuantityAction

@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { actionCreator } from "../utility";
+import { actionCreator } from "../utils";
 import { FETCHED, FETCHING } from "./setItemQuantityFetchStatus";
 export const SET_SHIPPING_FETCH_STATUS = "SET_SHIPPING_FETCH_STATUS";
 

@@ -2,7 +2,7 @@ import React from "react";
 import { connect, ConnectedProps } from "react-redux";
 import { Store } from "../store";
 import { itemPriceSelector } from "../selectors";
-import { formatCurrency } from "../utility/formatCurrency";
+import { formatCurrency } from "../utils";
 import { isEmpty } from "lodash";
 import { FETCHED } from "../actions";
 import CheckoutButton from "./CheckoutButton";

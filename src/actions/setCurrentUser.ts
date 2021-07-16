@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { actionCreator } from "../utility";
+import { actionCreator } from "../utils";
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 
 export interface User {

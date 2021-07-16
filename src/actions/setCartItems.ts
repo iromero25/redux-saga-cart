@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { actionCreator } from "../utility";
+import { actionCreator } from "../utils";
 export const SET_CART_ITEMS = "SET_CART_ITEMS";
 
 export interface Item {

@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { actionCreator } from "../utility";
+import { actionCreator } from "../utils";
 export const SET_TAX_RATE = "SET_TAX_RATE";
 
 export interface SetTaxRateAction extends Action<typeof SET_TAX_RATE> {
