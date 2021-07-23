@@ -1,9 +1,11 @@
-import React from "react";
+import React, { Dispatch } from "react";
 import {
   FETCHED,
   Item,
   decreaseItemQuantity,
   increaseItemQuantity,
+  DecreaseItemQuantityAction,
+  IncreaseItemQuantityAction,
 } from "../../actions";
 import { isEmpty } from "lodash";
 import { Store } from "../../store";
@@ -31,10 +33,13 @@ const mapStateToProps = (state: Store, ownProps: OwnProps) => {
   };
 };
 
-const mapDispatchToProps = {
-  decreaseItemQuantity,
-  increaseItemQuantity,
-};
+const mapDispatchToProps = (
+  dispatch: Dispatch<IncreaseItemQuantityAction | DecreaseItemQuantityAction>
+) => ({
+  increaseItemQuantity: (id: string) => dispatch(increaseItemQuantity(id)),
+  decreaseItemQuantity: (id: string, local: boolean) =>
+    dispatch(decreaseItemQuantity(id, local)),
+});
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 interface ReduxProps extends ConnectedProps<typeof connector> {

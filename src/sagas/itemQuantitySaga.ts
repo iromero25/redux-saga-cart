@@ -1,5 +1,6 @@
 import { currentUserSelector } from "../selectors";
 import { all, select, call, put, takeLatest } from "redux-saga/effects";
+import { decreaseUserItem, increaseUserItem } from "../api/fetchers";
 import {
   FETCHING,
   FETCHED,
@@ -16,10 +17,7 @@ function* handleIncreaseItemSaga({ payload }: IncreaseItemQuantityAction) {
   yield put(setItemQuantityFetchStatus(FETCHING));
   const currentUser: User = yield select(currentUserSelector);
   const itemId = payload.id;
-  const response: Response = yield call(
-    fetch,
-    `http://localhost:8081/cart/add/${currentUser.id}/${itemId}`
-  );
+  const response: Response = yield increaseUserItem(currentUser.id, itemId);
 
   if (response.status !== 200) {
     alert("There is no more stock available from the requested item");
@@ -39,10 +37,7 @@ function* handleDecreaseItemSaga({ payload }: DecreaseItemQuantityAction) {
   yield put(setItemQuantityFetchStatus(FETCHING));
   const currentUser: User = yield select(currentUserSelector);
   const itemId = payload.id;
-  const response: Response = yield call(
-    fetch,
-    `http://localhost:8081/cart/remove/${currentUser.id}/${itemId}`
-  );
+  const response: Response = yield decreaseUserItem(currentUser.id, itemId);
   if (response.status !== 200) {
     // quantity reached zero
     // To Do: we might end up with negative quantities, avoid this

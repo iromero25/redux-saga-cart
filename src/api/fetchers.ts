@@ -1,4 +1,4 @@
-import { ItemDetail, User } from "../actions";
+import { Item, ItemDetail, User } from "../actions";
 
 export const fetchUser = (userId: User["id"]) =>
   fetch(`http://localhost:8081/user/${userId}`);
@@ -14,3 +14,9 @@ export const fetchItem = (itemId: ItemDetail["id"]) =>
 
 export const fetchShipping = (cartItems: string) =>
   fetch(`http://localhost:8081/shipping/${cartItems}`);
+
+export const increaseUserItem = (userId: User["id"], itemId: Item["id"]) =>
+  fetch(`http://localhost:8081/cart/add/${userId}/${itemId}`);
+
+export const decreaseUserItem = (userId: User["id"], itemId: Item["id"]) =>
+  fetch(`http://localhost:8081/cart/remove/${userId}/${itemId}`);

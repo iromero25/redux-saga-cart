@@ -1,4 +1,4 @@
-import { combineReducers, createStore, applyMiddleware } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
 import {
   canCheckOutReducer,
@@ -9,11 +9,11 @@ import {
   shippingCostReducer,
   shippingFetchStatusReducer,
   taxRateReducer,
-} from "./reducers";
+} from "../reducers";
 import logger from "redux-logger";
-import rootSaga from "./sagas/rootSaga";
+import rootSaga from "../sagas/rootSaga";
+import initialStoreState from "./initialStoreState";
 
-const emptyInitialState = {};
 const sagaMiddleware = createSagaMiddleware();
 const middlewares =
   !process.env.NODE_ENV || process.env.NODE_ENV === "development"
@@ -33,11 +33,12 @@ const rootReducer = combineReducers({
 
 const store = createStore(
   rootReducer,
-  emptyInitialState,
+  initialStoreState,
   applyMiddleware(...middlewares)
 );
 
 sagaMiddleware.run(rootSaga);
 
+export type CreatedStore = typeof store;
 export type Store = ReturnType<typeof rootReducer>;
 export default store;
