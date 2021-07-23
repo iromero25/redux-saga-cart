@@ -1,14 +1,7 @@
-import {
-  SET_SHIPPING_FETCH_STATUS,
-  SetShippingFetchStatusAction,
-  FETCHING,
-} from "../actions";
+import { SET_SHIPPING_FETCH_STATUS, FETCHING } from "../actions";
+import { fetchStatusReducer } from "../utils";
 
-// maybe there's no need to have this reducer as we have another one that reduces a fetching status
-export const shippingFetchStatusReducer = (
-  shippingFetchStatus: SetShippingFetchStatusAction["payload"]["status"] = FETCHING,
-  action: SetShippingFetchStatusAction
-) =>
-  action.type === SET_SHIPPING_FETCH_STATUS
-    ? action.payload.status
-    : shippingFetchStatus;
+export const shippingFetchStatusReducer = fetchStatusReducer(
+  FETCHING,
+  SET_SHIPPING_FETCH_STATUS
+);
