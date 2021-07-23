@@ -1,42 +1,33 @@
 import React from "react";
-import store from "../store";
-import { Provider } from "react-redux";
 import { render } from "@testing-library/react";
 import UserInfo from "./UserInfo";
-import * as actions from "../actions/getCurrentUser";
 import { fetchUser } from "../api/fetchers";
-import mockFetchPromise from "../utility/mockPromise";
-import {
-  userMock,
-  cartMock,
-  taxRateMock,
-  itemArrayMock,
-  itemShippingMock,
-} from "../utility/mockData";
+import { mockFetchPromise } from "../utils";
+import { createReduxWrapper } from "../utils";
+import * as actions from "../actions/getCurrentUser";
+import { user, cart, taxRate, itemArray, itemShipping } from "../api/mockData";
 import "@testing-library/jest-dom";
+
+import store from "../store";
 
 // since this is an integration test, it is better to mock most of the API
 // calls involved and let all the logic in the sagas flow
 jest.mock("../api/fetchers", () => ({
-  fetchUser: jest.fn().mockImplementation(() => mockFetchPromise(userMock)),
-  fetchCart: jest.fn().mockImplementation(() => mockFetchPromise(cartMock)),
-  fetchTaxRate: jest.fn().mockImplementation(() => mockFetchPromise(taxRateMock)),
-  fetchItem: jest.fn().mockImplementation(() => mockFetchPromise(itemArrayMock)),
-  fetchShipping: jest
-    .fn()
-    .mockImplementation(() => mockFetchPromise(itemShippingMock)),
+  fetchUser: jest.fn().mockImplementation(() => mockFetchPromise(user)),
+  fetchCart: jest.fn().mockImplementation(() => mockFetchPromise(cart)),
+  fetchTaxRate: jest.fn().mockImplementation(() => mockFetchPromise(taxRate)),
+  fetchItem: jest.fn().mockImplementation(() => mockFetchPromise(itemArray)),
+  fetchShipping: jest.fn().mockImplementation(() => mockFetchPromise(itemShipping)),
 }));
 
-const Wrapper: React.FC = ({ children }) => (
-  <Provider store={store}>{children}</Provider>
-);
+const ReduxWrapper = createReduxWrapper(store);
 
 test("User Info component renders after the saga is triggered", async () => {
   const currentUserSpy = jest.spyOn(actions, "getCurrentUser");
   const { getByText, findByText, queryByText } = render(
-    <Wrapper>
+    <ReduxWrapper>
       <UserInfo />
-    </Wrapper>
+    </ReduxWrapper>
   );
 
   // To notice: the different way in which the testing-library text-related
@@ -47,14 +38,15 @@ test("User Info component renders after the saga is triggered", async () => {
   // `queryByText` works better to search something that is not expected to
   // be in de DOM as it returns null if no text is mathed. All other options
   // throw an exception in that case.
-  expect(queryByText(userMock.name)).not.toBeInTheDocument();
+  expect(queryByText(user.name)).not.toBeInTheDocument();
   expect(currentUserSpy).toHaveBeenCalled();
   expect(fetchUser).toHaveBeenCalled();
 
   // `findByText` works as expected with `await` (wait for an async op to
   // update the DOM)
-  const userName = await findByText(userMock.name);
-  const address = await findByText(userMock.address1);
+  const { name, address1 } = user;
+  const userName = await findByText(name);
+  const address = await findByText(address1);
   expect(userName).toBeInTheDocument();
   expect(address).toBeInTheDocument();
 });
