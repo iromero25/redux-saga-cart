@@ -1,21 +1,19 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { Provider } from "react-redux";
 import OrderSummary from "./OrderSummary";
+import { createReduxWrapper } from "../utils/";
 import store from "../store";
 
 // provides a set of custom jest matchers that you can use to extend jest
 // i.e. `.toBeVisible`
 import "@testing-library/jest-dom";
 
-const Wrapper: React.FC = ({ children }) => (
-  <Provider store={store}>{children}</Provider>
-);
+const Wrapper = createReduxWrapper(store);
 
 test("Order Summary is rendered with a loading spinner", () => {
   const { getByText, getByTitle } = render(
     <Wrapper>
-      <OrderSummary />  
+      <OrderSummary />
     </Wrapper>
   );
   const subtotalHeader = getByText("Subtotal");
