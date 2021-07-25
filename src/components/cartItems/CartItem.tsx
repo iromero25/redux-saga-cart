@@ -11,15 +11,9 @@ import { isEmpty } from "lodash";
 import { Store } from "../../store";
 import { connect, ConnectedProps } from "react-redux";
 import { itemPriceSelector } from "../../selectors";
-// import StoreConnector, { MapToState } from "../StoreConnector";
 
 interface OwnProps extends Item {}
-// interface Props extends ItemDetail {
-//   fetched: boolean;
-//   price: number;
-// }
 
-// const mapStateToProps: MapToState = (state, ownProps) => {
 const mapStateToProps = (state: Store, ownProps: OwnProps) => {
   const itemDetails = state.itemDetails;
   const quantityFetchStatus = state.itemQuantityFetchStatus;
@@ -46,7 +40,6 @@ interface ReduxProps extends ConnectedProps<typeof connector> {
   quantity: number;
 }
 
-// const CartItemDisplay: React.FC<ReduxProps & OwnProps & Props> = ({
 const CartItemDisplay: React.FC<ReduxProps> = ({
   fetched,
   name,
@@ -99,5 +92,4 @@ const CartItemDisplay: React.FC<ReduxProps> = ({
   </div>
 );
 
-// export default StoreConnector(CartItemDisplay, mapStateToProps);
 export default connector(CartItemDisplay);

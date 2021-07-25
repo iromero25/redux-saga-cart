@@ -9,3 +9,4 @@ export * from "./setShippingFetchStatus";
 export * from "./setShippingCost";
 export * from "./setTaxRate";
 export * from "./setCanCheckout";
+export * from "./toggleCheckingOut";

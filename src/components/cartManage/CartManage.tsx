@@ -2,7 +2,6 @@ import React from "react";
 import UserInfo from "../userInfo";
 import CartItemList from "../cartItems/CartItemList";
 import OrderSummary from "../OrderSummary";
-// import { SupportAvailableContainer } from '../SupportAvailable'
 
 const CartManageViewDisplay: React.FC = () => {
   return (
@@ -24,7 +23,6 @@ const CartManageViewDisplay: React.FC = () => {
         </section>
         <OrderSummary />
       </section>
-      <section>{/* <SupportAvailableContainer /> */}</section>
     </div>
   );
 };
