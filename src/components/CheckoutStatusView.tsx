@@ -1,18 +1,35 @@
 import React from "react";
-// import  CREDIT_VALIDATION_CHECKOUT_PHASE,
-// QUANTITY_VERIFICATION_CHECKOUT_PHASE,
-// ERROR_CHECKOUT_PHASE,
-// PURCHASE_FINALIZATION_CHECKOUT_PHASE,
-// SUCCESS_CHECKOUT_PHASE,
-// "../actions";
+import { connect, ConnectedProps } from "react-redux";
+import {
+  CREDIT_VALIDATION_CHECKOUT_PHASE,
+  QUANTITY_VERIFICATION_CHECKOUT_PHASE,
+  ERROR_CHECKOUT_PHASE,
+  PURCHASE_FINALIZATION_CHECKOUT_PHASE,
+  SUCCESS_CHECKOUT_PHASE,
+  INITIAL_CHECKOUT_PHASE,
+} from "../actions";
+import store, { Store } from "../store";
 
-// export const CheckoutStatusViewDisplay = ({ phase }) => (
-const CheckoutStatusView: React.FC = () => (
+const mapStateToProps = (state: Store) => ({
+  phase: state.checkoutPhase,
+});
+
+const Connector = connect(mapStateToProps);
+
+interface ReduxProps extends ConnectedProps<typeof Connector> {}
+
+export const CheckoutStatusView: React.FC<ReduxProps> = ({ phase }) => (
   <div className="text-center">
     <h1>Checking out</h1>
     <div>
-      {/* {
+      {
         {
+          [INITIAL_CHECKOUT_PHASE]: (
+            <section>
+              <div className="loader xl" />
+              <h2>Initial Checkout Phase...</h2>
+            </section>
+          ),
           [QUANTITY_VERIFICATION_CHECKOUT_PHASE]: (
             <section>
               <div className="loader xl" />
@@ -41,15 +58,15 @@ const CheckoutStatusView: React.FC = () => (
             <section>
               <h2>An error occurred.</h2>
               <p>
-                Funds on your credit card were insufficient, or an error occurred
-                while communicating with the server.
+                Funds on your credit card were insufficient, or an error
+                occurred while communicating with the server.
               </p>
             </section>
           ),
         }[phase]
-      } */}
+      }
     </div>
   </div>
 );
 
-export default CheckoutStatusView;
+export default Connector(CheckoutStatusView);

@@ -10,6 +10,7 @@ import {
   shippingFetchStatusReducer,
   taxRateReducer,
   isCheckingOutReducer,
+  checkoutPhaseReducer,
 } from "../reducers";
 import logger from "redux-logger";
 import rootSaga from "../sagas/rootSaga";
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   taxRate: taxRateReducer,
   canCheckOut: canCheckOutReducer,
   isCheckingOut: isCheckingOutReducer,
+  checkoutPhase: checkoutPhaseReducer,
 });
 
 const store = createStore(

@@ -10,3 +10,4 @@ export * from "./setShippingCost";
 export * from "./setTaxRate";
 export * from "./setCanCheckout";
 export * from "./toggleCheckingOut";
+export * from "./setCheckoutPhase";

@@ -6,4 +6,5 @@ export * from "./shippingFetchStatus";
 export * from "./shippingCost";
 export * from "./taxRate";
 export * from "./canCheckOut";
-export * from "./isCheckingOutReducer";
+export * from "./isCheckingOut";
+export * from "./checkoutPhase";

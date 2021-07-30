@@ -1,22 +1,27 @@
 import { Item, ItemDetail, User } from "../actions";
 
+const baseUrl = `http://localhost:8081`; // I need to dinamically assign this for heroku
+
 export const fetchUser = (userId: User["id"]) =>
-  fetch(`http://localhost:8081/user/${userId}`);
+  fetch(`${baseUrl}/user/${userId}`);
 
 export const fetchTaxRate = (country: User["country"]) =>
-  fetch(`http://localhost:8081/tax/${country}`);
+  fetch(`${baseUrl}/tax/${country}`);
 
 export const fetchCart = (userId: User["id"]) =>
-  fetch(`http://localhost:8081/cart/${userId}`);
+  fetch(`${baseUrl}/cart/${userId}`);
 
 export const fetchItem = (itemId: ItemDetail["id"]) =>
-  fetch(`http://localhost:8081/items/${itemId}`);
+  fetch(`${baseUrl}/items/${itemId}`);
 
 export const fetchShipping = (cartItems: string) =>
-  fetch(`http://localhost:8081/shipping/${cartItems}`);
+  fetch(`${baseUrl}/shipping/${cartItems}`);
 
 export const increaseUserItem = (userId: User["id"], itemId: Item["id"]) =>
-  fetch(`http://localhost:8081/cart/add/${userId}/${itemId}`);
+  fetch(`${baseUrl}/cart/add/${userId}/${itemId}`);
 
 export const decreaseUserItem = (userId: User["id"], itemId: Item["id"]) =>
-  fetch(`http://localhost:8081/cart/remove/${userId}/${itemId}`);
+  fetch(`${baseUrl}/cart/remove/${userId}/${itemId}`);
+
+export const validateUserCart = (user: User) =>
+  fetch(`${baseUrl}/cart/validate/${user.id}`);
