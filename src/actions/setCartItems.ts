@@ -1,11 +1,7 @@
 import { Action } from "redux";
+import { Item } from "./types";
 import { actionCreator } from "../utils";
 export const SET_CART_ITEMS = "SET_CART_ITEMS";
-
-export interface Item {
-  id: string;
-  quantity: number;
-}
 
 export interface SetCartItemsAction extends Action<typeof SET_CART_ITEMS> {
   payload: {

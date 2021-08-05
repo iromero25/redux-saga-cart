@@ -11,3 +11,4 @@ export * from "./setTaxRate";
 export * from "./setCanCheckout";
 export * from "./toggleCheckingOut";
 export * from "./setCheckoutPhase";
+export * from "./types";

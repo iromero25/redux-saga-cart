@@ -1,17 +1,7 @@
 import { Action } from "redux";
+import { ItemDetail } from "./types";
 import { actionCreator } from "../utils";
 export const SET_ITEM_DETAILS = "SET_ITEM_DETAILS";
-
-export interface ItemDetail {
-  id: string;
-  name: string;
-  description: string;
-  usd: number;
-  cad: number;
-  img: string;
-  quantityAvailable: number;
-  weight: number;
-}
 
 export interface SetItemDetailsAction extends Action<typeof SET_ITEM_DETAILS> {
   payload: {

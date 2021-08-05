@@ -1,14 +1,7 @@
 import { Action } from "redux";
+import { User } from "./types";
 import { actionCreator } from "../utils";
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
-
-export interface User {
-  id?: string;
-  name?: string;
-  country?: string;
-  address1?: string;
-  phone?: number;
-}
 
 export interface SetCurrentUserAction extends Action<typeof SET_CURRENT_USER> {
   payload: {

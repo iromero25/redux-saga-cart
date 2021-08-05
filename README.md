@@ -2,9 +2,13 @@
 
 Checkout cart app using Redux for state management and Sagas to handle several asynchronous database operations. Typescrypt is used as programming language.
 
-## server
+## Server
 
-To Do: mention that this app relies on an external server to serve its AJAX requests.
+This app executes AJAX calls that are dealt by an internal server. This server could have been placed external to this app but it I wanted to keep this whole application contained.
+
+Since the AJAX requests are RESTful API requests in reality, the server has to rely on an internal database to persist the data manipulated by such REST operations. The database is managed by the YAML package.
+
+All the logic comprising the API endpoints on the server ([routes.ts](./server/routes.ts)) as well as the database file itself [database.yml](./server/database.yml) were not coded by me; this is code that was sync'ed down from this [repository](https://github.com/danielstern/redux-saga-shopping-cart-server) and it was authored by [Daniel Stern](https://github.com/danielstern).
 
 ## Higher Order Component
 
@@ -29,6 +33,21 @@ There are a couple of important issues to pay attention to in there:
 ## Utilities
 
 I created the [actionCreator](./src/utility/actionCreator.ts) function that returns (as stated by its name) an Action Creator (which is in turn, also a function). `actionCreator` is strongly typed as is used to create all action creators. An interesting example of `actionCreator` receiving more than one argument can be seen in the [decreaseItemQuantity](./src/actions/decreaseItemQuantity.ts) file.
+
+## Scripts
+
+I list some useful information related to the scripts at the `package.json` that might not be instantky clear:
+
+- The **prebuild:server** script will run just before **build:server**. This will ensure that:
+
+  - the `/dist` folder is created if it doesn't exist, and;
+  - the `database.yml` file that is required by the server is copied inside it
+
+- The **build:server** script's purpose is to compile all the `.ts` files under the `/server` folder (following the configuration at the `tsconfig.server.json` file), including the [routes.ts](./server/routes.ts) file which is expected to load the data from the `database.yml` file.
+
+## tsconfig.server.json
+
+Note how this configuration file is only worried to transpile the `server.ts` file. However, since this one is importing the `routes.ts` file, it gets transpiled and placed under the same destination folder automatically. This means all dependencies are transpiled and correctly placed as needed.
 
 ## (Integration) Testing
 

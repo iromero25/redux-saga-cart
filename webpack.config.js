@@ -27,8 +27,20 @@ const config = {
       template: "./public/index.html",
       filename: "index.html",
     }),
+    // Note: if we move the  `api.html` file (which doesn't require react per se
+    // using this plugin, then loading the page throws  an error at the console:
+    // this plugin is meant to be ued by webpack to link an html  file with  the
+    // React app, therefore the main react App is loaded when accessing the page
+
+    // new HtmlWebpackPlugin({
+    //   template: "./public/api.html",
+    //   filename: "api.html",
+    // }),
     new CopyPlugin({
-      patterns: [{ from: "public/main.css", to: "main.css" }],
+      patterns: [
+        { from: "public/main.css", to: "main.css" },
+        { from: "public/api.html", to: "api.html" },
+      ],
     }),
   ],
 };
