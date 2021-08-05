@@ -1,6 +1,6 @@
 import { Item, ItemDetail, User } from "../actions";
 
-const baseUrl = `http://localhost:8081`; // I need to dinamically assign this for heroku
+const baseUrl = window.location.origin;
 
 export const fetchUser = (userId: User["id"]) =>
   fetch(`${baseUrl}/user/${userId}`);
@@ -25,3 +25,9 @@ export const decreaseUserItem = (userId: User["id"], itemId: Item["id"]) =>
 
 export const validateUserCart = (user: User) =>
   fetch(`${baseUrl}/cart/validate/${user.id}`);
+
+export const validateUserCreditCard = (user: User) =>
+  fetch(`${baseUrl}/card/validate/${user.id}`);
+
+export const executeUserPurchase = (user: User) =>
+  fetch(`${baseUrl}/card/charge/${user.id}`);

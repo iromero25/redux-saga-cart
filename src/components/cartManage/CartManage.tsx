@@ -9,7 +9,7 @@ const CartManageViewDisplay: React.FC = () => {
       <section className="row">
         <section className="col-6">
           <section className="">
-            <h1 title="The cart continues...">SagaCart</h1>
+            <h1 title="The cart continues...">Saga Cart</h1>
           </section>
         </section>
       </section>
