@@ -1,6 +1,10 @@
+import { FETCHED } from "../actions";
 import { Store } from "./store";
 
-export const storeMock: Pick<Store, "cartItems" | "itemDetails"> = {
+export const storeMock: Pick<
+  Store,
+  "cartItems" | "itemDetails" | "shippingCost" | "shippingFetchStatus" | "taxRate"
+> = {
   cartItems: [
     {
       id: "I10000",
@@ -19,4 +23,7 @@ export const storeMock: Pick<Store, "cartItems" | "itemDetails"> = {
       weight: 0.8,
     },
   ],
+  shippingCost: 3.5,
+  shippingFetchStatus: FETCHED,
+  taxRate: 0.15,
 };

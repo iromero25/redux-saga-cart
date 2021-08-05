@@ -38,7 +38,7 @@ export const cartItemsReducer = (
   }
 };
 
-// we make sure of retuning a new cart Items object with the updated
+// we make sure of returning a new CartItems object with the updated
 // quantity of the item received as parameter
 const immutableQuantityUpdate = (
   id: string,
