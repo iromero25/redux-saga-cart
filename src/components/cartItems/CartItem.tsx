@@ -35,12 +35,12 @@ const mapDispatchToProps = (
     dispatch(decreaseItemQuantity(id, local)),
 });
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-interface ReduxProps extends ConnectedProps<typeof connector> {
+const Connector = connect(mapStateToProps, mapDispatchToProps);
+interface ReduxProps extends ConnectedProps<typeof Connector> {
   quantity: number;
 }
 
-const CartItemDisplay: React.FC<ReduxProps> = ({
+const CartItem: React.FC<ReduxProps> = ({
   fetched,
   name,
   description,
@@ -72,7 +72,7 @@ const CartItemDisplay: React.FC<ReduxProps> = ({
           <span className="item-quantity">Quantity: {quantity}</span>
           <button
             className="btn btn-secondary"
-            disabled={quantityFetchStatus !== FETCHED}
+            disabled={quantityFetchStatus !== FETCHED || quantity <= 0}
             onClick={() => decreaseItemQuantity(id, false)}
           >
             -
@@ -92,4 +92,4 @@ const CartItemDisplay: React.FC<ReduxProps> = ({
   </div>
 );
 
-export default connector(CartItemDisplay);
+export default Connector(CartItem);

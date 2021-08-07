@@ -41,7 +41,6 @@ jest.mock("../../api/fetchers", () => {
 });
 
 describe("Test Cart Item List", () => {
-  // let renderedDom: ReturnType<typeof render>;
   const ReduxWrapper = createReduxWrapper(store);
 
   beforeEach(() => {

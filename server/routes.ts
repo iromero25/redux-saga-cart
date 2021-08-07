@@ -10,7 +10,7 @@ YAML.load("./dist/database.yml", (database: Database) => {
     (shouldAdd = true) =>
     (req: Req, res: Res) => {
       const { owner, itemID } = req.params;
-      const cart = database.carts.find((cart) => cart.owner === owner);
+      const cart = database.carts.find(cart => cart.owner === owner);
       if (!cart) {
         return res.status(500).json({
           error: "No cart found with the specified ID",
@@ -18,7 +18,7 @@ YAML.load("./dist/database.yml", (database: Database) => {
         });
       }
 
-      const item = database.items.find((item) => item.id === itemID);
+      const item = database.items.find(item => item.id === itemID);
       if (!item) {
         return res.status(500).json({
           error: "No item found with the specified ID",
@@ -26,9 +26,7 @@ YAML.load("./dist/database.yml", (database: Database) => {
         });
       }
 
-      const existingItem = cart.items.find(
-        (cartItem) => cartItem.id === itemID
-      );
+      const existingItem = cart.items.find(cartItem => cartItem.id === itemID);
       if (existingItem) {
         if (shouldAdd && existingItem.quantity >= item.quantityAvailable) {
           return res.status(503).json({
@@ -38,9 +36,10 @@ YAML.load("./dist/database.yml", (database: Database) => {
           });
         }
         existingItem.quantity += shouldAdd ? 1 : -1;
-        if (existingItem.quantity === 0) {
-          cart.items = cart.items.filter((item) => item.id !== itemID);
-        }
+        // I don't want to eliminate an item that has reached 0 requested units
+        // if (existingItem.quantity === 0) {
+        //   cart.items = cart.items.filter((item) => item.id !== itemID);
+        // }
       } else {
         if (shouldAdd) {
           cart.items.push({
@@ -49,8 +48,7 @@ YAML.load("./dist/database.yml", (database: Database) => {
           });
         } else {
           return res.status(500).json({
-            error:
-              "No item with the specified ID exists in the cart to be removed",
+            error: "No item with the specified ID exists in the cart to be removed",
             owner,
             itemID,
           });
@@ -64,7 +62,7 @@ YAML.load("./dist/database.yml", (database: Database) => {
 
   router.get("/user/:id", (req, res) => {
     const id = req.params.id;
-    const user = database.users.find((user) => user.id === id);
+    const user = database.users.find(user => user.id === id);
     if (!user) {
       return res.status(500).json({
         error: "No user with the specified ID",
@@ -79,7 +77,7 @@ YAML.load("./dist/database.yml", (database: Database) => {
     ["/cart/validate/:owner", "/cart/:owner", "/card/charge/:owner"],
     (req: Req, res: Res, next) => {
       const { owner } = req.params;
-      const cart = database.carts.find((cart) => cart.owner === owner);
+      const cart = database.carts.find(cart => cart.owner === owner);
       if (!cart) {
         return res
           .status(404)
@@ -96,7 +94,7 @@ YAML.load("./dist/database.yml", (database: Database) => {
     let validated = true;
     let error = null;
     items.forEach(({ id, quantity }) => {
-      const item = database.items.find((item) => item.id === id)!;
+      const item = database.items.find(item => item.id === id)!;
       if (item.quantityAvailable < quantity) {
         validated = false;
         error = "There is an insufficient quantity of " + id;
@@ -114,11 +112,9 @@ YAML.load("./dist/database.yml", (database: Database) => {
     ["/card/validate/:owner", "/card/charge/:owner"],
     (req: Req, res: Res, next) => {
       const { owner } = req.params;
-      const card = database.cards.find((card) => card.owner === owner);
+      const card = database.cards.find(card => card.owner === owner);
       if (!card) {
-        res
-          .status(500)
-          .send({ error: `No card is available for user ${owner}` });
+        res.status(500).send({ error: `No card is available for user ${owner}` });
       }
       req.card = card;
       next();
@@ -133,11 +129,10 @@ YAML.load("./dist/database.yml", (database: Database) => {
   router.get("/card/charge/:owner", (req: Req, res: Res) => {
     const { card, cart } = req;
     const { owner } = req.params;
-    const country =
-      database.users.find((user) => user.id === owner)?.country ?? "USD";
+    const country = database.users.find(user => user.id === owner)?.country ?? "USD";
     let total =
       cart?.items.reduce((total, { quantity, id }) => {
-        const item = database.items.find((item) => item.id === id)!;
+        const item = database.items.find(item => item.id === id)!;
         const symbol = country === "CAD" ? "cad" : "usd";
         const baseValue = item?.[symbol] ?? 0;
         const shipping = getItemShippingValue(item);
@@ -164,9 +159,7 @@ YAML.load("./dist/database.yml", (database: Database) => {
 
   router.get("/items/:ids", (req: Req, res: Res) => {
     const ids = req.params.ids.split(",");
-    const items = ids.map((id) =>
-      database.items.find((item) => item.id === id)
-    );
+    const items = ids.map(id => database.items.find(item => item.id === id));
     if (items.includes(undefined)) {
       res.status(500).json({ error: "A specified ID had no matching item" });
     } else {
@@ -176,9 +169,7 @@ YAML.load("./dist/database.yml", (database: Database) => {
 
   router.get("/prices/:symbol/:ids", (req: Req, res: Res) => {
     const ids = req.params.ids.split(",");
-    const items = ids.map(
-      (id) => database.items.find((item) => item.id === id)!
-    );
+    const items = ids.map(id => database.items.find(item => item.id === id)!);
     const supportedSymbols = ["CAD", "USD"];
     const symbol = req.params.symbol;
     if (!supportedSymbols.includes(symbol)) {
@@ -190,12 +181,10 @@ YAML.load("./dist/database.yml", (database: Database) => {
     }
 
     if (items.length === 0) {
-      return res
-        .status(500)
-        .json({ error: "A specified ID had no matching item" });
+      return res.status(500).json({ error: "A specified ID had no matching item" });
     } else {
       res.status(200).json(
-        items.map((item) => ({
+        items.map(item => ({
           id: item.id,
           symbol,
           price: symbol === "USD" ? item?.usd : item.cad,
@@ -210,8 +199,8 @@ YAML.load("./dist/database.yml", (database: Database) => {
   router.get("/shipping/:items", (req, res) => {
     const ids = req.params.items.split(",");
     let total = 0;
-    ids.forEach((id) => {
-      const item = database.items.find((item) => item.id === id)!;
+    ids.forEach(id => {
+      const item = database.items.find(item => item.id === id)!;
       //   if (item.weight === 0) {
       //     total += 0;
       //   } else if (item.weight < 0.5) {
@@ -227,7 +216,7 @@ YAML.load("./dist/database.yml", (database: Database) => {
   });
 
   const getTaxRate = (symbol: TaxRate["symbol"]) =>
-    database.taxRates.find((rate) => rate.symbol === symbol)!;
+    database.taxRates.find(rate => rate.symbol === symbol)!;
 
   router.get("/tax/:symbol", (req, res) => {
     const { symbol } = req.params;
