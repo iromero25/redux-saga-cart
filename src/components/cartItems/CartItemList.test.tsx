@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import CartItemList from "./CartItemList";
 // remember we need to import the action from the  file where it is being  declared
 // (and not from the `index.ts` file) if we want to spy/mock the function correctly
@@ -41,11 +41,11 @@ jest.mock("../../api/fetchers", () => {
 });
 
 describe("Test Cart Item List", () => {
-  let renderedDom: ReturnType<typeof render>;
+  // let renderedDom: ReturnType<typeof render>;
   const ReduxWrapper = createReduxWrapper(store);
 
   beforeEach(() => {
-    renderedDom = render(
+    render(
       <ReduxWrapper>
         <CartItemList />
       </ReduxWrapper>
@@ -55,7 +55,7 @@ describe("Test Cart Item List", () => {
   const decreaseItemQtySpy = jest.spyOn(decreaseItemAction, "decreaseItemQuantity");
 
   test("A cart item with a quantity is rendered", () => {
-    const { getByText } = renderedDom;
+    const { getByText } = screen;
     const quantityText = getByText(`Quantity: ${storeMock.cartItems[0].quantity}`);
     expect(quantityText).toBeInTheDocument();
   });
@@ -66,7 +66,7 @@ describe("Test Cart Item List", () => {
       increaseItemAction,
       "increaseItemQuantity"
     );
-    const { getByText, findByText } = renderedDom;
+    const { getByText } = screen;
     const plusButton = getByText("+");
     expect(plusButton).toBeInTheDocument();
 
@@ -83,7 +83,7 @@ describe("Test Cart Item List", () => {
   });
 
   test("Decrement button is disabled after it's been clicked", () => {
-    const { getByText } = renderedDom;
+    const { getByText } = screen;
     const minusButton = getByText("-");
     expect(minusButton).toBeInTheDocument();
     fireEvent.click(minusButton);
@@ -94,12 +94,20 @@ describe("Test Cart Item List", () => {
   // this is one way to test that incrementing the quantity of an item over its
   // actual existency in stock throws an error and reverts back to its original
   // quantity. The other way is to test the totals displayed at the DOM.
-  test("DecreaseItemQty is triggered when increasing an item's quantity fails", () => {
+  test("DecreaseItemQty is triggered when increasing an item's quantity fails", async () => {
     // This test tries to increment an item's quantity. This time, the mocked
     // request fails and thus an alert is executed; we then have to mock it:
     global.alert = jest.fn();
-    const { getByText } = renderedDom;
-    fireEvent.click(getByText("+"));
+    const { getByText } = screen;
+    const plusButton = getByText("+");
+
+    // IMPORTANT: need to wait for the DOM to  be completely updated after clicking
+    // the '+' button as we want to  check  that  the spy/method had been triggered
+    // after the request fails. Remember that as opposed to clicking the '-' button
+    // where the spy is triggered right away, here we click  the  '+' button, fails
+    // and as a consequence, the decrease function is triggered, so we want to wait
+    // for all to be finished
+    await fireEvent.click(plusButton);
     expect(decreaseItemQtySpy).toHaveBeenCalled();
   });
 });
