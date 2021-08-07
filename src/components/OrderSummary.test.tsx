@@ -1,9 +1,10 @@
 import React from "react";
 import OrderSummary from "./OrderSummary";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { createReduxWrapper, mockFetchPromise } from "../utils/";
 import { formatCurrency } from "../utils/formatCurrency";
 import { increaseItemQuantity } from "../actions";
+import * as fetchers from "../api/fetchers";
 
 // remember the storeMock needs to be imported before the store module
 import { storeMock } from "../store/mockData";
@@ -18,60 +19,85 @@ jest.mock("../store/initialStoreState", () => ({
   default: storeMock,
 }));
 
-// check how we aare mocking these API calls to do really do nothing;
-// we can do this because we are keeping the scope of this test limited
-// to the OrderSummary test
-jest.mock("../api/fetchers", () => {
-  const mockFn = jest.fn().mockImplementation;
-  return {
-    increaseUserItem: mockFn(() => mockFetchPromise({})),
-    fetchShipping: mockFn(() =>
-      mockFetchPromise({
-        total: 3.5,
-      })
-    ),
-  };
-});
-
 const Wrapper = createReduxWrapper(store);
 
-test("Order Summary is rendered subtotal, shipping, taxes and total figures", async () => {
-  const { getByText, getByTitle, findByText } = render(
+const checkFiguresExist = async (
+  price: number,
+  shipping: number,
+  currentQuantity: number
+) => {
+  const expectedSubtotal = price * currentQuantity;
+  const expectedTax = (expectedSubtotal + shipping) * storeMock.taxRate;
+  const expectedTotal = expectedSubtotal + shipping + expectedTax;
+
+  const { findByText } = screen;
+
+  const subtotalDom = await findByText(formatCurrency(expectedSubtotal));
+  const shippingDom = await findByText(formatCurrency(shipping));
+  const taxDom = await findByText(formatCurrency(expectedTax));
+  const totalDom = await findByText(formatCurrency(expectedTotal));
+
+  expect(subtotalDom).toBeInTheDocument();
+  expect(shippingDom).toBeInTheDocument();
+  expect(taxDom).toBeInTheDocument();
+  expect(totalDom).toBeInTheDocument();
+};
+
+const cartItem = storeMock.cartItems[0];
+const price = storeMock.itemDetails[0].usd;
+const expectedShipping = storeMock.shippingCost;
+
+let quantity = cartItem.quantity;
+
+beforeEach(() => {
+  jest
+    .spyOn(fetchers, "fetchShipping")
+    .mockImplementation(() => mockFetchPromise({ total: 3.5 }));
+
+  // we need to render the component for each test suite so they work as expected
+  // however, we need to thibk of the DOM as one through all tests; if the DOM is
+  // modified in one of them, then the changes persist to the next one
+  render(
     <Wrapper>
       <OrderSummary />
     </Wrapper>
   );
+});
 
-  const initialQuantity = storeMock.cartItems[0].quantity;
-  const price = storeMock.itemDetails[0].usd;
-  const expectedShipping = storeMock.shippingCost;
+test("Show initial figures and updates them as quantity is incremented", async () => {
+  jest
+    .spyOn(fetchers, "increaseUserItem")
+    .mockImplementation(() => mockFetchPromise({}));
 
-  const checkFiguresExist = async (currentQuantity: number) => {
-    let expectedSubtotal = price * currentQuantity;
-    let expectedTax = (expectedSubtotal + expectedShipping) * storeMock.taxRate;
-    let expectedTotal = expectedSubtotal + expectedShipping + expectedTax;
-
-    const subtotalDom = await findByText(formatCurrency(expectedSubtotal));
-    const shippingDom = await findByText(formatCurrency(expectedShipping));
-    const taxDom = await findByText(formatCurrency(expectedTax));
-    const totalDom = await findByText(formatCurrency(expectedTotal));
-
-    expect(subtotalDom).toBeInTheDocument();
-    expect(shippingDom).toBeInTheDocument();
-    expect(taxDom).toBeInTheDocument();
-    expect(totalDom).toBeInTheDocument();
-  };
-
-  await checkFiguresExist(initialQuantity);
+  await checkFiguresExist(price, expectedShipping, quantity);
 
   // the store needs to dispatch any actions we want to be processed
   // by redux otherwise the store is not affected
 
   // I decided to dispatch the action directly at the store so I can
   // keep this test scope limited to the OrderSummary component
-  store.dispatch(increaseItemQuantity(storeMock.cartItems[0].id));
+  store.dispatch(increaseItemQuantity(cartItem.id));
 
-  // once the increase item action is dispatched, then can check that
-  // the figures had been updated accordingly
-  await checkFiguresExist(initialQuantity + 1);
+  // once the increase item action is dispatched, we can check that
+  // the figures had been updated accordingly. See how we increment
+  // the quantity variable before passing it:
+  await checkFiguresExist(price, expectedShipping, ++quantity);
+});
+
+test("Figures not changed when item is incremented over its current stock qty", async () => {
+  // fail the increaseUserItem API request!!
+  global.alert = jest.fn();
+  const failingStatus = 500;
+  jest
+    .spyOn(fetchers, "increaseUserItem")
+    .mockImplementation(() => mockFetchPromise({}, failingStatus));
+
+  // the `quantity` variable reflects the correct item quantity we should
+  // test as its value is updated by the previous test.
+  await checkFiguresExist(price, expectedShipping, quantity);
+  store.dispatch(increaseItemQuantity(cartItem.id));
+
+  // check that the figures remain the same (for the same quantity) as
+  // the increase iten quantity is expected to fail
+  await checkFiguresExist(price, expectedShipping, quantity);
 });

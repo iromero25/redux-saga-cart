@@ -2,14 +2,12 @@ import { Item, ItemDetail, User } from "../actions";
 
 const baseUrl = window.location.origin;
 
-export const fetchUser = (userId: User["id"]) =>
-  fetch(`${baseUrl}/user/${userId}`);
+export const fetchUser = (userId: User["id"]) => fetch(`${baseUrl}/user/${userId}`);
 
 export const fetchTaxRate = (country: User["country"]) =>
   fetch(`${baseUrl}/tax/${country}`);
 
-export const fetchCart = (userId: User["id"]) =>
-  fetch(`${baseUrl}/cart/${userId}`);
+export const fetchCart = (userId: User["id"]) => fetch(`${baseUrl}/cart/${userId}`);
 
 export const fetchItem = (itemId: ItemDetail["id"]) =>
   fetch(`${baseUrl}/items/${itemId}`);

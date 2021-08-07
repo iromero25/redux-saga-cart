@@ -1,5 +1,5 @@
 import { currentUserSelector } from "../selectors";
-import { all, select, call, put, takeLatest } from "redux-saga/effects";
+import { all, select, put, takeLatest } from "redux-saga/effects";
 import { decreaseUserItem, increaseUserItem } from "../api/fetchers";
 import {
   FETCHING,
