@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Store } from "../../store";
-import CartManage from "../cartManage/CartManage";
+import CartManage from "../CartManage";
 import CheckoutStatusView from "../CheckoutStatusView";
 
 interface Props {

@@ -1,7 +1,7 @@
 import React from "react";
-import UserInfo from "../userInfo";
-import CartItemList from "../cartItems/CartItemList";
-import OrderSummary from "../OrderSummary";
+import UserInfo from "./userInfo";
+import CartItemList from "./cartItems/CartItemList";
+import OrderSummary from "./OrderSummary";
 
 const CartManageViewDisplay: React.FC = () => {
   return (
