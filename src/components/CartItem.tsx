@@ -6,11 +6,11 @@ import {
   increaseItemQuantity,
   DecreaseItemQuantityAction,
   IncreaseItemQuantityAction,
-} from "../../actions";
+} from "../actions";
 import { isEmpty } from "lodash";
-import { Store } from "../../store";
+import { Store } from "../store";
 import { connect, ConnectedProps } from "react-redux";
-import { itemPriceSelector } from "../../selectors";
+import { itemPriceSelector } from "../selectors";
 
 interface OwnProps extends Item {}
 

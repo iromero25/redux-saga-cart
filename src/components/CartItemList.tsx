@@ -1,9 +1,9 @@
 import React from "react";
-import { Store } from "../../store";
+import { Store } from "../store";
 import { isEmpty } from "lodash";
-import { Item } from "../../actions";
+import { Item } from "../actions";
 import CartItem from "./CartItem";
-import StoreConnector from "../StoreConnector";
+import StoreConnector from "./StoreConnector";
 
 interface StoreProps {
   cartItems: Item[];

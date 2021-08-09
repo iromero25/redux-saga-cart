@@ -3,17 +3,17 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import CartItemList from "./CartItemList";
 // remember we need to import the action from the  file where it is being  declared
 // (and not from the `index.ts` file) if we want to spy/mock the function correctly
-import * as increaseItemAction from "../../actions/increaseItemQuantity";
-import * as decreaseItemAction from "../../actions/decreaseItemQuantity";
+import * as increaseItemAction from "../actions/increaseItemQuantity";
+import * as decreaseItemAction from "../actions/decreaseItemQuantity";
 import "@testing-library/jest-dom";
 
 // order does matter here: it  seems the  `storeMock` that is used to  mock  the
 // `initialStoreState` needs to be imported before the ES module defining `store`
 // since the store depends on whatever is defined in `initialStoreState`
-import { storeMock } from "../../store/mockData";
-import store from "../../store";
-import { mockFetchPromise, createReduxWrapper } from "../../utils";
-import { cart, itemShipping } from "../../api/mockData";
+import { storeMock } from "../store/mockData";
+import store from "../store";
+import { mockFetchPromise, createReduxWrapper } from "../utils";
+import { cart, itemShipping } from "../api/mockData";
 
 // This is the way to mock an ES module that is exported as default: we need
 // to specify the `__esModule` attribute to true otherwise it won't work.
@@ -21,12 +21,12 @@ import { cart, itemShipping } from "../../api/mockData";
 // By mocking the `initialStoreState` module we can be sure the store is initialised
 // with the mocked data. This is a  better route than trying to  pass a  state to  a
 // function that initializes the store, as that didn't work as expected.
-jest.mock("../../store/initialStoreState", () => ({
+jest.mock("../store/initialStoreState", () => ({
   __esModule: true,
   default: storeMock,
 }));
 
-jest.mock("../../api/fetchers", () => {
+jest.mock("../api/fetchers", () => {
   const mockFn = jest.fn().mockImplementation;
   const failStatus = 500;
   return {

@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Store } from "../../store";
-import CartManage from "../CartManage";
-import CheckoutStatus from "../CheckoutStatus";
+import { Store } from "../store";
+import CartManage from "./CartManage";
+import CheckoutStatus from "./CheckoutStatus";
 
 interface Props {
   isCheckingOut: boolean;

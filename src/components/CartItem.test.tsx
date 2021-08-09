@@ -1,11 +1,11 @@
 import React from "react";
-import { storeMock } from "../../store/mockData";
-import store from "../../store";
+import { storeMock } from "../store/mockData";
+import store from "../store";
 import CartItemList from "./CartItemList";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { mockFetchPromise, createReduxWrapper } from "../../utils";
-import { itemShipping } from "../../api/mockData";
-import * as fetchers from "../../api/fetchers";
+import { mockFetchPromise, createReduxWrapper } from "../utils";
+import { itemShipping } from "../api/mockData";
+import * as fetchers from "../api/fetchers";
 
 import "@testing-library/jest-dom";
 

@@ -1,11 +1,10 @@
 import React from "react";
 import CheckoutStatus from "./CheckoutStatus";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { createReduxWrapper, mockFetchPromise } from "../utils";
 import * as fetchers from "../api/fetchers";
 import "@testing-library/jest-dom";
 
-// import { storeMock } from "../store/mockData";
 import { toggleCheckingOut } from "../actions";
 import store from "../store";
 
