@@ -48,7 +48,6 @@ export function* checkout() {
     yield put(setCheckoutPhase(ERROR_CHECKOUT_PHASE));
     return;
   }
-  console.info("cart validated");
 
   yield put(setCheckoutPhase(CREDIT_VALIDATION_CHECKOUT_PHASE));
   const creditCardValidated: boolean = yield validateCreditCard(user);

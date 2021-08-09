@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Store } from "../../store";
 import CartManage from "../CartManage";
-import CheckoutStatusView from "../CheckoutStatusView";
+import CheckoutStatus from "../CheckoutStatus";
 
 interface Props {
   isCheckingOut: boolean;
@@ -15,17 +15,7 @@ const mapStateToProps = (state: Store) => ({
 const Connector = connect(mapStateToProps);
 
 const MainDisplay: React.FC<Props> = ({ isCheckingOut }) => (
-  <div>
-    {isCheckingOut ? (
-      <div>
-        <CheckoutStatusView />
-      </div>
-    ) : (
-      <div>
-        <CartManage />
-      </div>
-    )}
-  </div>
+  <div>{isCheckingOut ? <CheckoutStatus /> : <CartManage />}</div>
 );
 
 export default Connector(MainDisplay);

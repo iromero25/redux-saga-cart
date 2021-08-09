@@ -18,7 +18,7 @@ const Connector = connect(mapStateToProps);
 
 interface ReduxProps extends ConnectedProps<typeof Connector> {}
 
-export const CheckoutStatusView: React.FC<ReduxProps> = ({ phase }) => (
+export const CheckoutStatus: React.FC<ReduxProps> = ({ phase }) => (
   <div className="text-center">
     <h1>Checking out</h1>
     <div>
@@ -58,8 +58,8 @@ export const CheckoutStatusView: React.FC<ReduxProps> = ({ phase }) => (
             <section>
               <h2>An error occurred.</h2>
               <p>
-                Funds on your credit card were insufficient, or an error
-                occurred while communicating with the server.
+                Funds on your credit card were insufficient, or an error occurred
+                while communicating with the server.
               </p>
             </section>
           ),
@@ -69,4 +69,4 @@ export const CheckoutStatusView: React.FC<ReduxProps> = ({ phase }) => (
   </div>
 );
 
-export default Connector(CheckoutStatusView);
+export default Connector(CheckoutStatus);
