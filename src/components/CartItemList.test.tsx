@@ -1,6 +1,8 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
 import CartItemList from "./CartItemList";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { createReduxWrapper } from "../utils";
+
 // remember we need to import the action from the  file where it is being  declared
 // (and not from the `index.ts` file) if we want to spy/mock the function correctly
 import * as increaseItemAction from "../actions/increaseItemQuantity";
@@ -11,8 +13,9 @@ import "@testing-library/jest-dom";
 // `initialStoreState` needs to be imported before the ES module defining `store`
 // since the store depends on whatever is defined in `initialStoreState`
 import { storeMock } from "../store/mockData";
+import { mockFetchPromise } from "../testUtils";
 import store from "../store";
-import { mockFetchPromise, createReduxWrapper } from "../utils";
+import * as fetchers from "../api/fetchers";
 import { cart, itemShipping } from "../api/mockData";
 
 // This is the way to mock an ES module that is exported as default: we need
@@ -26,29 +29,19 @@ jest.mock("../store/initialStoreState", () => ({
   default: storeMock,
 }));
 
-jest.mock("../api/fetchers", () => {
-  const mockFn = jest.fn().mockImplementation;
-  const failStatus = 500;
-  return {
-    // the default behaviour of this function is to fail, it will only
-    // succeed the first time that it is invoked:
-    increaseUserItem: jest
-      .fn(() => mockFetchPromise(storeMock.cartItems, failStatus)) // we send a fail status
-      .mockImplementationOnce(() => mockFetchPromise(cart.items)),
-    decreaseUserItem: mockFn(() => mockFetchPromise(cart.items)),
-    fetchShipping: mockFn(() => mockFetchPromise(itemShipping)),
-  };
-});
+const ReduxWrapper = createReduxWrapper(store);
 
 describe("Test Cart Item List", () => {
-  const ReduxWrapper = createReduxWrapper(store);
-
   beforeEach(() => {
     render(
       <ReduxWrapper>
         <CartItemList />
       </ReduxWrapper>
     );
+
+    jest
+      .spyOn(fetchers, "fetchShipping")
+      .mockImplementation(() => mockFetchPromise(itemShipping));
   });
 
   const decreaseItemQtySpy = jest.spyOn(decreaseItemAction, "decreaseItemQuantity");
@@ -61,30 +54,41 @@ describe("Test Cart Item List", () => {
 
   // this test is interesting:
   test("Increment button is disabled after it's been clicked", async () => {
+    jest
+      .spyOn(fetchers, "increaseUserItem")
+      .mockImplementation(() => mockFetchPromise(cart.items));
+
     const increaseItemQtySpy = jest.spyOn(
       increaseItemAction,
       "increaseItemQuantity"
     );
+
     const { getByText } = screen;
     const plusButton = getByText("+");
-    expect(plusButton).toBeInTheDocument();
-
     // as the store is initialised with items, the plusButton should be enabled
-    // at loading
     expect(plusButton).toBeEnabled();
     fireEvent.click(plusButton);
     expect(increaseItemQtySpy).toHaveBeenCalled();
+
     // immediately  after the '+' button is clicked, the button should be disabled,
     // note how I do not use `await  queryByText` since I DO NOT  want to wait  for
     // the dom to be updated as part of the sagas being triggered: I use `getByText`
-    // to immediatly check that the element in the dom be disabled
+    // to immediatly check that the element in the dom be disabled.
     expect(getByText("+")).toBeDisabled();
   });
 
-  test("Decrement button is disabled after it's been clicked", () => {
-    const { getByText } = screen;
-    const minusButton = getByText("-");
-    expect(minusButton).toBeInTheDocument();
+  test("Decrement button is disabled after it's been clicked", async () => {
+    jest
+      .spyOn(fetchers, "decreaseUserItem")
+      .mockImplementation(() => mockFetchPromise(cart.items));
+
+    const { getByText, findByText } = screen;
+    const minusButton = await findByText("-");
+    expect(minusButton).toBeEnabled;
+
+    // do not use `await` with the click event as the results are immediate: minus
+    // button is clicked and the `decreaseUserItem` is triggered right after. Also,
+    // the button should be disabled.
     fireEvent.click(minusButton);
     expect(decreaseItemQtySpy).toHaveBeenCalled();
     expect(getByText("-")).toBeDisabled();
@@ -94,11 +98,17 @@ describe("Test Cart Item List", () => {
   // actual existency in stock throws an error and reverts back to its original
   // quantity. The other way is to test the totals displayed at the DOM.
   test("DecreaseItemQty is triggered when increasing an item's quantity fails", async () => {
+    const failStatus = 500;
+    jest
+      .spyOn(fetchers, "increaseUserItem")
+      .mockImplementation(() => mockFetchPromise(storeMock.cartItems, failStatus));
+
     // This test tries to increment an item's quantity. This time, the mocked
     // request fails and thus an alert is executed; we then have to mock it:
     global.alert = jest.fn();
     const { getByText } = screen;
     const plusButton = getByText("+");
+    expect(plusButton).toBeEnabled();
 
     // IMPORTANT: need to wait for the DOM to  be completely updated after clicking
     // the '+' button as we want to  check  that  the spy/method had been triggered
@@ -108,5 +118,6 @@ describe("Test Cart Item List", () => {
     // for all to be finished
     await fireEvent.click(plusButton);
     expect(decreaseItemQtySpy).toHaveBeenCalled();
+    expect(alert).toHaveBeenCalled();
   });
 });
