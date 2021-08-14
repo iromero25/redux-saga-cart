@@ -1,23 +1,24 @@
 import React from "react";
 import CheckoutStatus from "./CheckoutStatus";
 import { render, screen } from "@testing-library/react";
-import { createReduxWrapper, mockFetchPromise } from "../utils";
-import * as fetchers from "../api/fetchers";
+import { createReduxWrapper } from "../utils";
+import { toggleCheckingOut } from "../actions";
 import "@testing-library/jest-dom";
 
-import { toggleCheckingOut } from "../actions";
+// the import order of these modules is importat for the mockApis to work
+import { storeMock } from "../store/mockData";
+import { mockAPIs, mockFetchPromise } from "../testUtils";
 import store from "../store";
+import * as fetchers from "../api/fetchers";
 
-jest.mock("../api/fetchers", () => ({
-  validateUserCart: jest
-    .fn()
-    .mockImplementation(() => mockFetchPromise({ validated: true })),
-  validateUserCreditCard: jest
-    .fn()
-    .mockImplementation(() => mockFetchPromise({ validated: true })),
-  executeUserPurchase: jest
-    .fn()
-    .mockImplementation(() => mockFetchPromise({ success: true })),
+// Important: I cannot provide a reference to the `mockAPIs`  function as second
+// parameter of the mock e.g.: `jest.mock("../api/fetchers", mockAPIs)` since it
+// won't work. I need to specify it as an arrow function like this:
+jest.mock("../api/fetchers", () => mockAPIs());
+
+jest.mock("../store/initialStoreState", () => ({
+  __esModule: true,
+  default: storeMock,
 }));
 
 const Wrapper = createReduxWrapper(store);
@@ -60,6 +61,7 @@ describe("Checkout component", () => {
   });
 
   test("display error message when there's not enough credit to buy items", async () => {
+    // see how we can override a previously mocked API like this:
     jest
       .spyOn(fetchers, "executeUserPurchase")
       .mockImplementation(() => mockFetchPromise({ success: false }));

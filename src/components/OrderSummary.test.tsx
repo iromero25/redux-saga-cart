@@ -1,7 +1,8 @@
 import React from "react";
 import OrderSummary from "./OrderSummary";
 import { render, screen } from "@testing-library/react";
-import { createReduxWrapper, mockFetchPromise } from "../utils/";
+import { createReduxWrapper } from "../utils/";
+import { mockAPIs, mockFetchPromise } from "../testUtils";
 import { formatCurrency } from "../utils/formatCurrency";
 import { increaseItemQuantity } from "../actions";
 import * as fetchers from "../api/fetchers";
@@ -13,6 +14,8 @@ import store from "../store";
 // provides a set of custom jest matchers that you can use to extend jest
 // i.e. `.toBeVisible`
 import "@testing-library/jest-dom";
+
+jest.mock("../api/fetchers", () => mockAPIs());
 
 jest.mock("../store/initialStoreState", () => ({
   __esModule: true,
@@ -50,10 +53,6 @@ const expectedShipping = storeMock.shippingCost;
 let quantity = cartItem.quantity;
 
 beforeEach(() => {
-  jest
-    .spyOn(fetchers, "fetchShipping")
-    .mockImplementation(() => mockFetchPromise({ total: 3.5 }));
-
   // we need to render the component for each test suite so they work as expected
   // however, we need to thibk of the DOM as one through all tests; if the DOM is
   // modified in one of them, then the changes persist to the next one
@@ -65,10 +64,6 @@ beforeEach(() => {
 });
 
 test("Show initial figures and updates them as quantity is incremented", async () => {
-  jest
-    .spyOn(fetchers, "increaseUserItem")
-    .mockImplementation(() => mockFetchPromise({}));
-
   await checkFiguresExist(price, expectedShipping, quantity);
 
   // the store needs to dispatch any actions we want to be processed

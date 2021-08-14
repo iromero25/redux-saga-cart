@@ -1,24 +1,20 @@
 import React from "react";
-import { render } from "@testing-library/react";
 import UserInfo from "./UserInfo";
-import { fetchUser } from "../api/fetchers";
-import { mockFetchPromise } from "../utils";
+import { render } from "@testing-library/react";
 import { createReduxWrapper } from "../utils";
 import * as actions from "../actions/getCurrentUser";
-import { user, cart, taxRate, itemArray, itemShipping } from "../api/mockData";
+import { user } from "../api/mockData";
+
+// I believe `mockAPIs` needs to be imported before `store` so it can work as expected
+import { mockAPIs } from "../testUtils";
+import store from "../store";
+import { fetchUser } from "../api/fetchers";
 import "@testing-library/jest-dom";
 
-import store from "../store";
-
-// since this is an integration test, it is better to mock most of the API
-// calls involved and let all the logic in the sagas flow
-jest.mock("../api/fetchers", () => ({
-  fetchUser: jest.fn().mockImplementation(() => mockFetchPromise(user)),
-  fetchCart: jest.fn().mockImplementation(() => mockFetchPromise(cart)),
-  fetchTaxRate: jest.fn().mockImplementation(() => mockFetchPromise(taxRate)),
-  fetchItem: jest.fn().mockImplementation(() => mockFetchPromise(itemArray)),
-  fetchShipping: jest.fn().mockImplementation(() => mockFetchPromise(itemShipping)),
-}));
+// Important: I cannot provide a reference to the `mockAPIs`  function as second
+// parameter of the mock e.g.: `jest.mock("../api/fetchers", mockAPIs)` since it
+// won't work. I need to specify it as an arrow function like this:
+jest.mock("../api/fetchers", () => mockAPIs());
 
 const ReduxWrapper = createReduxWrapper(store);
 

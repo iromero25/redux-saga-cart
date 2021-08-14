@@ -1,21 +1,18 @@
 import React from "react";
-import store from "../store";
 import OrderSummary from "./OrderSummary";
 import { render, screen } from "@testing-library/react";
-import { createReduxWrapper, mockFetchPromise } from "../utils/";
-import { cart, itemArray, itemShipping, user, taxRate } from "../api/mockData";
+import { createReduxWrapper } from "../utils/";
+import { user } from "../api/mockData";
+
+import { mockAPIs } from "../testUtils";
+import store from "../store";
 
 // provides a set of custom jest matchers that you can use to extend jest
 // i.e. `.toBeVisible`
 import "@testing-library/jest-dom";
 import { setCurrentUser } from "../actions";
 
-jest.mock("../api/fetchers", () => ({
-  fetchCart: jest.fn().mockImplementation(() => mockFetchPromise(cart)),
-  fetchTaxRate: jest.fn().mockImplementation(() => mockFetchPromise(taxRate)),
-  fetchItem: jest.fn().mockImplementation(() => mockFetchPromise(itemArray)),
-  fetchShipping: jest.fn().mockImplementation(() => mockFetchPromise(itemShipping)),
-}));
+jest.mock("../api/fetchers", () => mockAPIs());
 
 const Wrapper = createReduxWrapper(store);
 
@@ -63,6 +60,7 @@ test("Checkout button remains disabled while fetching totals", async () => {
 
 test("Checkout button finally gets enabled after the DOM finishes fetching", async () => {
   const { findByText } = screen;
+  store.dispatch(setCurrentUser(user));
   // however, here I wait fot the DOM to be updated (hence using `findByText`)
   // to finally check that the Check out button is enabled
   const checkoutButton = await findByText("Check Out");

@@ -13,10 +13,14 @@ import "@testing-library/jest-dom";
 // `initialStoreState` needs to be imported before the ES module defining `store`
 // since the store depends on whatever is defined in `initialStoreState`
 import { storeMock } from "../store/mockData";
-import { mockFetchPromise } from "../testUtils";
+import { mockAPIs, mockFetchPromise } from "../testUtils";
 import store from "../store";
 import * as fetchers from "../api/fetchers";
-import { cart, itemShipping } from "../api/mockData";
+
+// Important: I cannot provide a reference to the `mockAPIs`  function as second
+// parameter of the mock e.g.: `jest.mock("../api/fetchers", mockAPIs)` since it
+// won't work. I need to specify it as an arrow function like this:
+jest.mock("../api/fetchers", () => mockAPIs());
 
 // This is the way to mock an ES module that is exported as default: we need
 // to specify the `__esModule` attribute to true otherwise it won't work.
@@ -38,10 +42,6 @@ describe("Test Cart Item List", () => {
         <CartItemList />
       </ReduxWrapper>
     );
-
-    jest
-      .spyOn(fetchers, "fetchShipping")
-      .mockImplementation(() => mockFetchPromise(itemShipping));
   });
 
   const decreaseItemQtySpy = jest.spyOn(decreaseItemAction, "decreaseItemQuantity");
@@ -54,10 +54,6 @@ describe("Test Cart Item List", () => {
 
   // this test is interesting:
   test("Increment button is disabled after it's been clicked", async () => {
-    jest
-      .spyOn(fetchers, "increaseUserItem")
-      .mockImplementation(() => mockFetchPromise(cart.items));
-
     const increaseItemQtySpy = jest.spyOn(
       increaseItemAction,
       "increaseItemQuantity"
@@ -78,10 +74,6 @@ describe("Test Cart Item List", () => {
   });
 
   test("Decrement button is disabled after it's been clicked", async () => {
-    jest
-      .spyOn(fetchers, "decreaseUserItem")
-      .mockImplementation(() => mockFetchPromise(cart.items));
-
     const { getByText, findByText } = screen;
     const minusButton = await findByText("-");
     expect(minusButton).toBeEnabled;
@@ -98,6 +90,11 @@ describe("Test Cart Item List", () => {
   // actual existency in stock throws an error and reverts back to its original
   // quantity. The other way is to test the totals displayed at the DOM.
   test("DecreaseItemQty is triggered when increasing an item's quantity fails", async () => {
+    // we can override the `increaseUserItem` implementation defined at `mockAPIs`
+    // as long as the method is defined in there. I  believe what happens is that
+    // as we mock the whole /api/fetchers module,  we need to  provide the method
+    // (`increaseUserItem` in  this case) if we  want to re-mock it. If we didn't
+    // define that method there, then this mock below would fail:
     const failStatus = 500;
     jest
       .spyOn(fetchers, "increaseUserItem")

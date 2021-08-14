@@ -1,11 +1,11 @@
 import React from "react";
-import { storeMock } from "../store/mockData";
-import store from "../store";
 import CartItemList from "./CartItemList";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { mockFetchPromise, createReduxWrapper } from "../utils";
-import { itemShipping } from "../api/mockData";
-import * as fetchers from "../api/fetchers";
+import { createReduxWrapper } from "../utils";
+
+import { mockAPIs } from "../testUtils";
+import { storeMock } from "../store/mockData";
+import store from "../store";
 
 import "@testing-library/jest-dom";
 
@@ -15,7 +15,9 @@ const Wrapper = createReduxWrapper(store);
 // testing `CartItem`. Testing it this way is easier since CartItemList
 // hooks up Redux and passes the state down to CartItem.
 
-jest.mock("../../store/initialStoreState", () => ({
+jest.mock("../api/fetchers", () => mockAPIs());
+
+jest.mock("../store/initialStoreState", () => ({
   __esModule: true,
   default: {
     ...storeMock,
@@ -24,14 +26,6 @@ jest.mock("../../store/initialStoreState", () => ({
 }));
 
 beforeEach(() => {
-  jest
-    .spyOn(fetchers, "fetchShipping")
-    .mockImplementation(() => mockFetchPromise(itemShipping));
-
-  jest
-    .spyOn(fetchers, "decreaseUserItem")
-    .mockImplementation(() => mockFetchPromise({}));
-
   render(
     <Wrapper>
       <CartItemList />
