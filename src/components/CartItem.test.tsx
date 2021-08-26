@@ -1,36 +1,22 @@
 import React from "react";
 import CartItemList from "./CartItemList";
-import { fireEvent, render, screen } from "@testing-library/react";
-import { createReduxWrapper } from "../utils";
-
-import { mockAPIs } from "../testUtils";
+import { fireEvent, screen } from "@testing-library/react";
+import { mockAPIs } from "../testUtils/mockAPIs";
+import { renderWithRedux } from "../testUtils";
 import { storeMock } from "../store/mockData";
-import store from "../store";
 
 import "@testing-library/jest-dom";
-
-const Wrapper = createReduxWrapper(store);
 
 // Even though I am importing the `CartItemList` component, I am really
 // testing `CartItem`. Testing it this way is easier since CartItemList
 // hooks up Redux and passes the state down to CartItem.
-
 jest.mock("../api/fetchers", () => mockAPIs());
 
-jest.mock("../store/initialStoreState", () => ({
-  __esModule: true,
-  default: {
+beforeEach(() => {
+  renderWithRedux(<CartItemList />, {
     ...storeMock,
     cartItems: [{ ...storeMock.cartItems[0], quantity: 1 }],
-  },
-}));
-
-beforeEach(() => {
-  render(
-    <Wrapper>
-      <CartItemList />
-    </Wrapper>
-  );
+  });
 });
 
 test("A cart item with a quantity of one is rendered", () => {

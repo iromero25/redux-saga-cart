@@ -1,27 +1,23 @@
 import React from "react";
 import OrderSummary from "./OrderSummary";
-import { render, screen } from "@testing-library/react";
-import { createReduxWrapper } from "../utils/";
+import { screen } from "@testing-library/react";
 import { user } from "../api/mockData";
 
-import { mockAPIs } from "../testUtils";
-import store from "../store";
+import { mockAPIs } from "../testUtils/mockAPIs";
+import { renderWithRedux } from "../testUtils/";
 
 // provides a set of custom jest matchers that you can use to extend jest
 // i.e. `.toBeVisible`
 import "@testing-library/jest-dom";
 import { setCurrentUser } from "../actions";
+import { CreatedStore } from "../store";
 
 jest.mock("../api/fetchers", () => mockAPIs());
 
-const Wrapper = createReduxWrapper(store);
-
+let myStore: CreatedStore;
 beforeEach(() => {
-  render(
-    <Wrapper>
-      <OrderSummary />
-    </Wrapper>
-  );
+  const { store } = renderWithRedux(<OrderSummary />);
+  myStore = store;
 });
 
 test("Order Summary is initially rendered with loading spinners", () => {
@@ -47,7 +43,7 @@ test("Checkout button remains disabled while fetching totals", async () => {
   // dispatch the setCurrentUser action with mock data, this is listened to
   // by the `fetchCartSaga` that will trigger all the logic to fetch the
   // items in a cart
-  store.dispatch(setCurrentUser(user));
+  myStore.dispatch(setCurrentUser(user));
 
   // after that is dispatched, we immediately check what the "loading.." labels
   // be still present in the DOM as  the fetching takes  some time that's why I
@@ -60,7 +56,7 @@ test("Checkout button remains disabled while fetching totals", async () => {
 
 test("Checkout button finally gets enabled after the DOM finishes fetching", async () => {
   const { findByText } = screen;
-  store.dispatch(setCurrentUser(user));
+  myStore.dispatch(setCurrentUser(user));
   // however, here I wait fot the DOM to be updated (hence using `findByText`)
   // to finally check that the Check out button is enabled
   const checkoutButton = await findByText("Check Out");

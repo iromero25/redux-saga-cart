@@ -1,5 +1,8 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
+import logger from "redux-logger";
+import rootSaga from "../sagas/rootSaga";
+import initialStoreState from "./initialStoreState";
 import {
   canCheckOutReducer,
   cartItemsReducer,
@@ -12,9 +15,6 @@ import {
   isCheckingOutReducer,
   checkoutPhaseReducer,
 } from "../reducers";
-import logger from "redux-logger";
-import rootSaga from "../sagas/rootSaga";
-import initialStoreState from "./initialStoreState";
 
 const sagaMiddleware = createSagaMiddleware();
 const middlewares =
@@ -22,7 +22,7 @@ const middlewares =
     ? [sagaMiddleware, logger]
     : [sagaMiddleware];
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   currentUser: currentUserReducer,
   cartItems: cartItemsReducer,
   itemDetails: itemDetailsReducer,

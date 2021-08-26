@@ -1,2 +1,2 @@
-export * from "./mockAPIs";
 export * from "./mockFetchPromise";
+export * from "./renderWithRedux";

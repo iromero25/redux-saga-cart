@@ -1,13 +1,11 @@
 import React from "react";
 import UserInfo from "./UserInfo";
-import { render } from "@testing-library/react";
-import { createReduxWrapper } from "../utils";
-import * as actions from "../actions/getCurrentUser";
 import { user } from "../api/mockData";
+import * as actions from "../actions/getCurrentUser";
 
 // I believe `mockAPIs` needs to be imported before `store` so it can work as expected
-import { mockAPIs } from "../testUtils";
-import store from "../store";
+import { mockAPIs } from "../testUtils/mockAPIs";
+import { renderWithRedux } from "../testUtils";
 import { fetchUser } from "../api/fetchers";
 import "@testing-library/jest-dom";
 
@@ -16,15 +14,9 @@ import "@testing-library/jest-dom";
 // won't work. I need to specify it as an arrow function like this:
 jest.mock("../api/fetchers", () => mockAPIs());
 
-const ReduxWrapper = createReduxWrapper(store);
-
 test("User Info component renders after the saga is triggered", async () => {
   const currentUserSpy = jest.spyOn(actions, "getCurrentUser");
-  const { getByText, findByText, queryByText } = render(
-    <ReduxWrapper>
-      <UserInfo />
-    </ReduxWrapper>
-  );
+  const { getByText, findByText, queryByText } = renderWithRedux(<UserInfo />);
 
   // To notice: the different way in which the testing-library text-related
   // functions are used:

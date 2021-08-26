@@ -1,7 +1,6 @@
 import React from "react";
 import CartItemList from "./CartItemList";
-import { fireEvent, render, screen } from "@testing-library/react";
-import { createReduxWrapper } from "../utils";
+import { fireEvent, screen } from "@testing-library/react";
 
 // remember we need to import the action from the  file where it is being  declared
 // (and not from the `index.ts` file) if we want to spy/mock the function correctly
@@ -13,9 +12,10 @@ import "@testing-library/jest-dom";
 // `initialStoreState` needs to be imported before the ES module defining `store`
 // since the store depends on whatever is defined in `initialStoreState`
 import { storeMock } from "../store/mockData";
-import { mockAPIs, mockFetchPromise } from "../testUtils";
-import store from "../store";
+import { mockAPIs } from "../testUtils/mockAPIs";
+import { mockFetchPromise } from "../testUtils";
 import * as fetchers from "../api/fetchers";
+import { renderWithRedux } from "../testUtils/renderWithRedux";
 
 // Important: I cannot provide a reference to the `mockAPIs`  function as second
 // parameter of the mock e.g.: `jest.mock("../api/fetchers", mockAPIs)` since it
@@ -28,20 +28,14 @@ jest.mock("../api/fetchers", () => mockAPIs());
 // By mocking the `initialStoreState` module we can be sure the store is initialised
 // with the mocked data. This is a  better route than trying to  pass a  state to  a
 // function that initializes the store, as that didn't work as expected.
-jest.mock("../store/initialStoreState", () => ({
-  __esModule: true,
-  default: storeMock,
-}));
-
-const ReduxWrapper = createReduxWrapper(store);
+// jest.mock("../store/initialStoreState", () => ({
+//   __esModule: true,
+//   default: storeMock,
+// }));
 
 describe("Test Cart Item List", () => {
   beforeEach(() => {
-    render(
-      <ReduxWrapper>
-        <CartItemList />
-      </ReduxWrapper>
-    );
+    renderWithRedux(<CartItemList />, storeMock);
   });
 
   const decreaseItemQtySpy = jest.spyOn(decreaseItemAction, "decreaseItemQuantity");

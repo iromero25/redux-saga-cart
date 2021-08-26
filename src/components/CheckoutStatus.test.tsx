@@ -1,14 +1,14 @@
 import React from "react";
 import CheckoutStatus from "./CheckoutStatus";
-import { render, screen } from "@testing-library/react";
-import { createReduxWrapper } from "../utils";
+import { screen } from "@testing-library/react";
 import { toggleCheckingOut } from "../actions";
 import "@testing-library/jest-dom";
 
 // the import order of these modules is importat for the mockApis to work
 import { storeMock } from "../store/mockData";
-import { mockAPIs, mockFetchPromise } from "../testUtils";
-import store from "../store";
+import { mockAPIs } from "../testUtils/mockAPIs";
+import { mockFetchPromise, renderWithRedux } from "../testUtils";
+import { CreatedStore } from "../store";
 import * as fetchers from "../api/fetchers";
 
 // Important: I cannot provide a reference to the `mockAPIs`  function as second
@@ -16,45 +16,39 @@ import * as fetchers from "../api/fetchers";
 // won't work. I need to specify it as an arrow function like this:
 jest.mock("../api/fetchers", () => mockAPIs());
 
-jest.mock("../store/initialStoreState", () => ({
-  __esModule: true,
-  default: storeMock,
-}));
-
-const Wrapper = createReduxWrapper(store);
-
 describe("Checkout component", () => {
+  let myStore: CreatedStore;
   beforeEach(() => {
-    render(
-      <Wrapper>
-        <CheckoutStatus />
-      </Wrapper>
-    );
+    const { store } = renderWithRedux(<CheckoutStatus />, storeMock);
+    myStore = store;
   });
 
   test("display quantity verification message", async () => {
-    store.dispatch(toggleCheckingOut(true));
+    // using the store object from the store module to dispatch actions works as
+    // expected (even if the store is created  by `renderWithRedux`). I  believe
+    // this due to the fact that there's always only one store handled by Redux.
+    myStore.dispatch(toggleCheckingOut(true));
     const { getByText } = screen;
     const initialCheckout = getByText("Verifying items are in stock...");
     expect(initialCheckout).toBeInTheDocument();
   });
 
   test("display card validation message", async () => {
-    store.dispatch(toggleCheckingOut(true));
+    myStore.dispatch(toggleCheckingOut(true));
     const { findByText } = screen;
     const creditCardValidation = await findByText(/validating credit card/i);
     expect(creditCardValidation).toBeInTheDocument();
   });
 
   test("display finalizing purchase message", async () => {
-    store.dispatch(toggleCheckingOut(true));
+    myStore.dispatch(toggleCheckingOut(true));
     const { findByText } = screen;
     const purchaseFinalization = await findByText(/finalizing purchase/i);
     expect(purchaseFinalization).toBeInTheDocument();
   });
 
   test("display checkout complete message", async () => {
-    store.dispatch(toggleCheckingOut(true));
+    myStore.dispatch(toggleCheckingOut(true));
     const { findByText } = screen;
     const checkoutComplete = await findByText(/checkout is complete/i);
     expect(checkoutComplete).toBeInTheDocument();
@@ -65,7 +59,7 @@ describe("Checkout component", () => {
     jest
       .spyOn(fetchers, "executeUserPurchase")
       .mockImplementation(() => mockFetchPromise({ success: false }));
-    store.dispatch(toggleCheckingOut(true));
+    myStore.dispatch(toggleCheckingOut(true));
     const { findByText } = screen;
     const errorMessage = await findByText(
       /funds on your credit card were insufficient/i
