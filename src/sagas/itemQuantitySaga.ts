@@ -40,7 +40,9 @@ function* handleDecreaseItemSaga({ payload }: DecreaseItemQuantityAction) {
   const response: Response = yield decreaseUserItem(currentUser.id, itemId);
   if (response.status !== 200) {
     // quantity reached zero
-    // To Do: we might end up with negative quantities, avoid this
+    // we might end up with negative quantities, but this is handled by
+    // disabling the minus (-) button at the rendered component when the
+    // quantity reaches zero
   }
   yield put(setItemQuantityFetchStatus(FETCHED));
 }

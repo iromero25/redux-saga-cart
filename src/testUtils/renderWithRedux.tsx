@@ -7,15 +7,20 @@ import createSagaMiddleware from "redux-saga";
 import rootSaga from "../sagas/rootSaga";
 import { rootReducer, Store } from "../store";
 
-// ToDo: explain this:
+// This returns a component that wraps any children components (passed through
+// their JSX syntax)  whith the  Provider  component while instiating its  own
+// store with  an initial  state if passed. This allows  us to easily  specify
+// the iniital state of the store  for our tests. The store reference  is also
+// returned as part of this method so the tests suites can trigger any actions
+// on it and the tests can work as expected.
 export const renderWithRedux = (
   Component: JSX.Element,
-  initialStore?: Partial<Store>
+  initialState?: Partial<Store>
 ) => {
   const sagaMiddleware = createSagaMiddleware();
   const store = createStore(
     rootReducer,
-    initialStore || {},
+    initialState || {},
     applyMiddleware(sagaMiddleware)
   );
   // we need to run the saga for our store, otherwise the dispatched
