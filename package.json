@@ -10,7 +10,9 @@
     "build:server": "tsc -p tsconfig.server.json",
     "build:dev": "webpack --env.NODE_ENV=development --mode=development",
     "build": "rm -rf dist && webpack --mode=production && yarn build:server",
-    "start": "node ./dist/server/server.js"
+    "start": "node ./dist/server/server.js",
+    "test:e2e": "cypress run",
+    "test:e2e:dev": "cypress open"
   },
   "repository": {
     "type": "git",
@@ -35,6 +37,7 @@
     "yamljs": "0.2.10"
   },
   "devDependencies": {
+    "@testing-library/cypress": "^8.0.0",
     "@testing-library/jest-dom": "^5.13.0",
     "@testing-library/react": "^11.2.7",
     "@types/express": "^4.17.11",
@@ -46,6 +49,7 @@
     "@types/redux-logger": "^3.0.8",
     "@types/yamljs": "^0.2.31",
     "copy-webpack-plugin": "6.4.1",
+    "cypress": "^8.3.1",
     "html-webpack-plugin": "^4.0.0",
     "jest": "^26.1.0",
     "reselect": "^4.0.0",

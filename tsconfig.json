@@ -6,5 +6,6 @@
     "esModuleInterop": true,
     "strict": true,
     "jsx": "react" /* Specify hoe to compile JSX code: 'preserve', 'react-native', or 'react'./, */
-  }
+  },
+  "exclude": ["cypress/**/*"]
 }
