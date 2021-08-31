@@ -1,14 +1,14 @@
 # redux-saga-cart
 
-Checkout cart app using Redux for state management and Sagas to handle several asynchronous database operations. Typescrypt is used as programming language.
+Example of an online Checkout Cart application. It uses Redux for state management combinded with Sagas to handle several asynchronous database operations that are perfomed via AJAX requests. Typescrypt is used as the main programming language.
 
 ## Server
 
-This app executes AJAX calls that are dealt by an internal server. This server could have been placed external to this app but it I wanted to keep this whole application contained.
+This app executes AJAX calls that are dealt by an internal server. This server could have been placed externally but I wanted to keep this whole app contained.
 
-Since the AJAX requests are RESTful API requests in reality, the server has to rely on an internal database to persist the data manipulated by such REST operations. The database is managed by the YAML package.
+Since the AJAX requests are RESTful API requests in reality, the server relies on an internal database to persist the data manipulated by such REST operations. The database is managed by the YAML library. It is out of the scope of this repository to elaborate on how YAML works.
 
-All the logic comprising the API endpoints on the server ([routes.ts](./server/routes.ts)) as well as the database file itself [database.yml](./server/database.yml) were not coded by me; this is code that was sync'ed down from this [repository](https://github.com/danielstern/redux-saga-shopping-cart-server) and it was authored by [Daniel Stern](https://github.com/danielstern).
+All the logic comprising the API endpoints on the server ([routes.ts](./server/routes.ts)) as well as the database file itself [database.yml](./server/database.yml) were not coded by me: this is code that was sync'ed down from this [repository](https://github.com/danielstern/redux-saga-shopping-cart-server) and it was authored by [Daniel Stern](https://github.com/danielstern).
 
 ## Higher Order Component
 
@@ -16,34 +16,37 @@ A Higher Order Component (HOC) was created to connect a component to the Redux's
 
 This proved challenging due to an ongoing issue with Typescript's dynamic typing of the wrapped component's props which can be seen [here](https://github.com/microsoft/TypeScript/issues/28884).
 
-The component is working and can be in action wrapping the [CartItemList](./src/components/cartItems/CartItemList.tsx) component.
+The component is working and can be seen in action wrapping the [CartItemList](./src/components/CartItemList.tsx) component.
 
 There are a couple of important issues to pay attention to in there:
 
 1. It takes two arguments: the component it is wrapping and the `mapStateToProps` function.
-1. We need to specify all the props in the interface that is being wrapped:
+1. We need to specify all the props in the interface that are being wrapped:
 
    - the props that are connected through the store, and;
    - the own props (the ones declared by its parent component)
 
    (See the code at the wrapped _CartItemList_ component to see an example of how these props are defined).
 
-1. If the `mapStateToProps` is using/accessing `ownProps` then **it has to be typed** using the `MapToState` type that is exported by `StoreConnector`. The reason behind this is that `StoreConnector` cannot correctly infer `mapStateToProps` type when ownProps is involved. See the _mapStateToProps_ defined in the [CartItem](./src/components/cartItems/CartItem) component to see an example of this situtation.
+1. If the `mapStateToProps` is using/accessing `ownProps` then **it has to be typed** using the `MapToState` type that is exported by `StoreConnector`. The reason behind this is that `StoreConnector` cannot correctly infer `mapStateToProps` type when ownProps is involved. See the _mapStateToProps_ defined in the [CartItem](./src/components/CartItem.tsx) component to see an example of this situation.
 
 ## Utilities
 
-I created the [actionCreator](./src/utility/actionCreator.ts) function that returns (as stated by its name) an Action Creator (which is in turn, also a function). `actionCreator` is strongly typed as is used to create all action creators. An interesting example of `actionCreator` receiving more than one argument can be seen in the [decreaseItemQuantity](./src/actions/decreaseItemQuantity.ts) file.
+I created the [actionCreator](./src/utils/actionCreator.ts) function that returns (as stated by its name) an Action Creator (which is in turn, also a function). `actionCreator` is strongly typed as is used to create all action creators. An interesting example of `actionCreator` receiving more than one argument can be seen in the [decreaseItemQuantity](./src/actions/decreaseItemQuantity.ts) file.
 
-## Scripts
+## Scripts (and bulding)
 
-I list some useful information related to the scripts at the `package.json` that might not be instantky clear:
+I am listing some useful information related to the scripts at the `package.json` below:
 
+- The **build:dev** script runs all the tasks configured via Webpack to create the bundles related to the front-end.
 - The **prebuild:server** script will run just before **build:server**. This will ensure that:
 
   - the `/dist` folder is created if it doesn't exist, and;
   - the `database.yml` file that is required by the server is copied inside it
 
 - The **build:server** script's purpose is to compile all the `.ts` files under the `/server` folder (following the configuration at the `tsconfig.server.json` file), including the [routes.ts](./server/routes.ts) file which is expected to load the data from the `database.yml` file.
+- The **build** script executes both `build:dev` & `build:server` scripts effetivelly building the whole application.
+- The **start** script runs the transpiled server from the generated `dist/` folder.
 
 ## tsconfig.server.json
 
@@ -64,8 +67,8 @@ There are a couple of important features that are worth mentioning for this test
 Here's a list of some relevant test files along with their description:
 
 1. [UserInfo.test.tsx](./src/components/UserInfo.test.tsx). Tests `UserInfo`. This is the first test to look at and the simplest one. It is testing that the `getCurrentUser` action is triggered as part of the `useEffect` hook in that component and thus, all sagas listening to that action are springed. I mock all API calls involved and let the sagas flow with it. The test is just checking the mocked user data is displayed at the DOM.
-1. [CartItemList.test.tsx](./src/components/cartItems/CartItemList.test.tsx). Tests `CartItemList` but mainly `CartItem`. It starts by checking that the DOM loads with cart data as we mock inital data for the store. Then ir proceeds to verify that the add and decrease quantity buttons (+ & -) do trigger the expected actions but more importantly, that the buttons are disabled immediately after being clicked on. It finishes by checking adding an item "reverts" back to the initial quantity when we go over the existing quantity in stock.
-1. [OderSummary.test.tsx](./src/components/OrderSummary.tests.tsx). One of the most complete there are. The intention is to only test the right figures (subtotal, tax, shipping and total) are being shown every time we dispatch an action to increase or decrease the quantity. This includes testing for the case where we exceed the physical stock of an item and thus the quanity is reverted back. This test is important because it is refactoring the logic to check present quantities in the DOM (so it can be reused) and because it is overriding some mocked APIs that are initially created through the `mockAPIs` util. Please refer to the comments therein for more info.
+1. [CartItemList.test.tsx](./src/components/CartItemList.test.tsx). Tests `CartItemList` but mainly `CartItem`. It starts by checking that the DOM loads with cart data as we mock inital data for the store. Then ir proceeds to verify that the add and decrease quantity buttons (+ & -) do trigger the expected actions but more importantly, that the buttons are disabled immediately after being clicked on. It finishes by checking adding an item "reverts" back to the initial quantity when we go over the existing quantity in stock.
+1. [OderSummary.test.tsx](./src/components/OrderSummary.test.tsx). One of the most complete there are. The intention is to only test the right figures (subtotal, tax, shipping and total) are being shown every time we dispatch an action to increase or decrease the quantity. This includes testing for the case where we exceed the physical stock of an item and thus the quanity is reverted back. This test is important because it is refactoring the logic to check present quantities in the DOM (so it can be reused) and because it is overriding some mocked APIs that are initially created through the `mockAPIs` util. Please refer to the comments therein for more info.
 
 ## NPM Registry and Library dependencies
 
