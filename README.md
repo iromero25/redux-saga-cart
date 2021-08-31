@@ -47,6 +47,7 @@ I am listing some useful information related to the scripts at the `package.json
 - The **build:server** script's purpose is to compile all the `.ts` files under the `/server` folder (following the configuration at the `tsconfig.server.json` file), including the [routes.ts](./server/routes.ts) file which is expected to load the data from the `database.yml` file.
 - The **build** script executes both `build:dev` & `build:server` scripts effetivelly building the whole application.
 - The **start** script runs the transpiled server from the generated `dist/` folder.
+- Run the **test** script to run all tests in this app.
 
 ## tsconfig.server.json
 
@@ -56,7 +57,9 @@ Note how this configuration file is only worried to transpile the `server.ts` fi
 
 I am providing integration tests for some components and as such, sagas are being tested. I am using React's Testing-Library and thus, my tests are focused on checking the DOM being updated accordingly, specially after a saga has being triggered.
 
-There are a couple of important features that are worth mentioning for this tests:
+As specified previously, `yarn test` runs all tests for this app.
+
+There are a couple of important testing-related features that are worth mentioning:
 
 - The usage of the [mockAPIs](./src/testUtils/mockAPIs.ts) function that supports with the mocking of all APIs used throught the tests. This is convenient as our tests rely on all API calls to be mocked. Refer to any of the test files to check how the function is used.
 

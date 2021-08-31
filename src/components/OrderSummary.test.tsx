@@ -92,7 +92,7 @@ test("Figures not changed when item is incremented over its current stock qty", 
   // the `quantity` variable reflects the correct item quantity we should
   // test as its value is updated by the previous test.
   await checkFiguresExist(price, expectedShipping, quantity);
-  displayItemQuantity(myStore);
+  // displayItemQuantity(myStore);
 
   // check that the figures remain the same (for the same quantity) as
   // the increase iten quantity is expected to fail
@@ -107,7 +107,7 @@ test("Figures not changed when item is incremented over its current stock qty", 
   myStore.dispatch(increaseItemQuantity(cartItem.id));
   await checkFiguresExist(price, expectedShipping, quantity);
   expect(alert).toHaveBeenCalled();
-  displayItemQuantity(myStore);
+  // displayItemQuantity(myStore);
 });
 
 const displayItemQuantity = (store: CreatedStore) => {
