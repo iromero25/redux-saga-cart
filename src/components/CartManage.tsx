@@ -1,5 +1,5 @@
 import React from "react";
-import UserInfo from "./userInfo";
+import UserInfo from "./UserInfo";
 import CartItemList from "./CartItemList";
 import OrderSummary from "./OrderSummary";
 

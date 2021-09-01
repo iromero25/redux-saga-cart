@@ -1,6 +1,10 @@
-# redux-saga-cart
+# Redux Saga Cart
 
-Example of an online Checkout Cart application. It uses Redux for state management combinded with Sagas to handle several asynchronous database operations that are perfomed via AJAX requests. Typescrypt is used as the main programming language.
+Example of an online checkout cart application. It displays three items only whose quantities can be increased or decreased. By doing so, the different costs in the cart are re-calculated and updated at the user interface as expected. The user has the option to checkout (complete the sale) which will be approved or rejected based on whether the total sale exceeds the $500 dolar limit on the user's credit.
+
+This app implements Redux for state management combinded with Sagas to handle several asynchronous database operations that are perfomed via AJAX requests. Typescrypt is used as the main programming language.
+
+The final version of the Checkout Cart can be accessed here: [https://iromero-redux-saga-cart.herokuapp.com/](https://iromero-redux-saga-cart.herokuapp.com/)
 
 ## Server
 
@@ -9,6 +13,14 @@ This app executes AJAX calls that are dealt by an internal server. This server c
 Since the AJAX requests are RESTful API requests in reality, the server relies on an internal database to persist the data manipulated by such REST operations. The database is managed by the YAML library. It is out of the scope of this repository to elaborate on how YAML works.
 
 All the logic comprising the API endpoints on the server ([routes.ts](./server/routes.ts)) as well as the database file itself [database.yml](./server/database.yml) were not coded by me: this is code that was sync'ed down from this [repository](https://github.com/danielstern/redux-saga-shopping-cart-server) and it was authored by [Daniel Stern](https://github.com/danielstern).
+
+## Build and Run the app locally
+
+Execute the following scripts using yarn in order:
+
+1. yarn install
+2. yarn build
+3. yarn start
 
 ## Higher Order Component
 
