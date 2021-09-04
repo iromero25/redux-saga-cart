@@ -1,0 +1,19 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "no-empty-interface": "off",
+    "no-prototype-builtins": "off",
+    "react-hooks/exhaustive-deps": "off"
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended", // Use recommended rules from @eslint-plugin-react
+    "plugin:react-hooks/recommended", // Use recommended rules for react hooks
+    "plugin:@typescript-eslint/recommended" // Use recommended rules from @typescript-eslint/eslint-plugin
+  ]
+}

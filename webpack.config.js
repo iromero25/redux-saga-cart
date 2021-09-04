@@ -11,7 +11,7 @@ const config = {
     rules: [
       {
         test: /\.(t|j)sx?$/,
-        use: ["ts-loader"],
+        use: ["ts-loader", "eslint-loader"],
         exclude: /node_modules/,
       },
     ],

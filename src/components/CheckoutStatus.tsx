@@ -8,7 +8,7 @@ import {
   SUCCESS_CHECKOUT_PHASE,
   INITIAL_CHECKOUT_PHASE,
 } from "../actions";
-import store, { Store } from "../store";
+import { Store } from "../store";
 
 const mapStateToProps = (state: Store) => ({
   phase: state.checkoutPhase,
@@ -58,8 +58,8 @@ export const CheckoutStatus: React.FC<ReduxProps> = ({ phase }) => (
             <section>
               <h2>An error occurred.</h2>
               <p>
-                Funds on your credit card were insufficient, or an error occurred
-                while communicating with the server.
+                Funds on your credit card were insufficient, or an error occurred while
+                communicating with the server.
               </p>
             </section>
           ),

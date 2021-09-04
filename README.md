@@ -91,3 +91,13 @@ As a reminder, library dependencies were all installed using NPM's public reposi
 `YARN_REGISTRY=https://registry.npmjs.org yarn install`
 
 Also, I am using specifyic verions of `webpack`, `webpack-cli`, `typescript`, `ts-loader` and `copy-webpack-plugin` that are not conflictive. More recent versions of these libraries were tried and resulted in many errors being thrown at compile/bundle time.
+
+## ESLint
+
+To try to keep things as close to industry best coding practices, I am trying to add ESLint support. This roughly means that we need to:
+
+- Install the `eslint` library
+- Install the `eslint-loader` which is added to the webpack configuration so all transpiled/compiled code can be processed (or loaded) by eslint and rules can be applied to it
+- Add the [.eslintrc](./.eslintrc) configuration file that specifies the parser, linting rules to be applied (`extends` section) and any exceptions that we might want to override (`rules` section). Note that the plugins specified at the `extends` section are libraries (sets of rules) that need to be added as devDependencies.
+
+In my experience creating this app I found out that it might be better to develop **without** any linting configuration just to add it **at the very end of the development** stage. This facilitates coding while also ensuring getting our code linted.
